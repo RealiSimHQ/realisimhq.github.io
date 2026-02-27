@@ -64,13 +64,15 @@ body::before {
   cursor: pointer;
 }
 .hero-logo:hover {
-  filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 80px rgba(180, 77, 255, 0.4));
   transform: scale(1.03);
-  animation: logoPulse 1.5s ease-in-out infinite;
+  animation: logoPulse 2s linear infinite;
 }
 @keyframes logoPulse {
-  0%, 100% { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 80px rgba(180, 77, 255, 0.4)); }
-  50% { filter: drop-shadow(0 0 60px rgba(180, 77, 255, 0.7)) drop-shadow(0 0 100px rgba(255, 215, 0, 0.5)); }
+  0%   { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 4px rgba(180, 77, 255, 0.2)); }
+  25%  { filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.2)) drop-shadow(0 0 12px rgba(180, 77, 255, 0.8)); }
+  50%  { filter: drop-shadow(0 0 12px rgba(180, 77, 255, 0.8)) drop-shadow(0 0 4px rgba(255, 215, 0, 0.2)); }
+  75%  { filter: drop-shadow(0 0 4px rgba(180, 77, 255, 0.2)) drop-shadow(0 0 12px rgba(255, 215, 0, 0.8)); }
+  100% { filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8)) drop-shadow(0 0 4px rgba(180, 77, 255, 0.2)); }
 }
 .hero h1 {
   font-size: 3.2rem;
@@ -718,7 +720,7 @@ footer a { color: var(--cyan); text-decoration: none; }
 <div class="container">
   <div class="hero">
     <a href="https://www.patreon.com/RealiSimHQ" target="_blank"><img src="realisimhq-logo.png" alt="RealiSimHQ" class="hero-logo" /></a>
-    <div class="sub" style="font-style:italic;font-size:1.3rem;letter-spacing:3px;">Assetto Corsa Content Catalog</div>
+    <div class="sub" style="font-style:italic;font-size:1.4rem;letter-spacing:3px;font-weight:600;">Assetto Corsa Content Catalog</div>
   </div>
   
   <div class="stats">
