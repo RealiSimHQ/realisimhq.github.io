@@ -60,6 +60,17 @@ body::before {
   margin-bottom: 16px;
   border-radius: 12px;
   filter: drop-shadow(0 0 30px rgba(0, 240, 255, 0.2));
+  transition: filter 0.4s, transform 0.4s;
+  cursor: pointer;
+}
+.hero-logo:hover {
+  filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 80px rgba(180, 77, 255, 0.4));
+  transform: scale(1.03);
+  animation: logoPulse 1.5s ease-in-out infinite;
+}
+@keyframes logoPulse {
+  0%, 100% { filter: drop-shadow(0 0 40px rgba(255, 215, 0, 0.6)) drop-shadow(0 0 80px rgba(180, 77, 255, 0.4)); }
+  50% { filter: drop-shadow(0 0 60px rgba(180, 77, 255, 0.7)) drop-shadow(0 0 100px rgba(255, 215, 0, 0.5)); }
 }
 .hero h1 {
   font-size: 3.2rem;
@@ -706,7 +717,7 @@ footer a { color: var(--cyan); text-decoration: none; }
 
 <div class="container">
   <div class="hero">
-    <img src="realisimhq-logo.png" alt="RealiSimHQ" class="hero-logo" />
+    <a href="https://www.patreon.com/RealiSimHQ" target="_blank"><img src="realisimhq-logo.png" alt="RealiSimHQ" class="hero-logo" /></a>
     <div class="sub" style="font-style:italic;font-size:1.3rem;letter-spacing:3px;">Assetto Corsa Content Catalog</div>
   </div>
   
@@ -1011,27 +1022,28 @@ renderTracks(TRACKS);
 renderPacks();
 renderServers();
 
-// Dynamic server status
+// Dynamic server status (fetched from static JSON updated every 5min)
 async function updateServerStatus() {
-  let onlineCount = 0;
-  for (const s of SERVERS) {
-    try {
-      const resp = await fetch(`http://${API_HOST}:${s.http}/api/details`, { signal: AbortSignal.timeout(3000) });
-      if (resp.ok) {
-        const data = await resp.json();
-        s._online = true;
-        s._players = data.Clients || 0;
-        s._maxPlayers = data.MaxClients || 0;
-        s._track = data.Track || s.track;
-        onlineCount++;
+  try {
+    const resp = await fetch('server-status.json?t=' + Date.now());
+    const data = await resp.json();
+    let onlineCount = 0;
+    for (const status of data) {
+      const server = SERVERS.find(s => s.http === status.port);
+      if (server) {
+        server._online = status.online;
+        server._players = status.clients;
+        server._maxPlayers = status.maxclients;
+        if (status.track) server._track = status.track;
+        if (status.online) onlineCount++;
       }
-    } catch(e) { s._online = false; }
-  }
-  document.getElementById('stat-servers').textContent = onlineCount + '/' + SERVERS.length;
-  renderServers();
+    }
+    document.getElementById('stat-servers').textContent = onlineCount + '/' + SERVERS.length;
+    renderServers();
+  } catch(e) { console.warn('Server status fetch failed:', e); }
 }
 updateServerStatus();
-setInterval(updateServerStatus, 60000);
+setInterval(updateServerStatus, 300000);
 
 // Update car count stat to exclude zipped carpacks
 const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks').length;
