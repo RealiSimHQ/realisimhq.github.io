@@ -568,6 +568,89 @@ td.model a:hover::after {
   background: rgba(0, 240, 255, 0.1);
 }
 
+/* Clickable stat tabs */
+.stat-tab { cursor: pointer; user-select: none; }
+.stat-tab.active { border-color: var(--cyan); box-shadow: var(--glow); }
+.stat-tab:not(.active):hover { border-color: var(--cyan); transform: translateY(-2px); }
+
+/* Tools bar */
+.tools-bar {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.tool-link {
+  position: relative;
+  padding: 10px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tool-link:hover {
+  border-color: var(--cyan);
+  box-shadow: var(--glow);
+}
+.tool-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.3px;
+}
+.tool-popout {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  background: var(--surface2);
+  border: 1px solid var(--cyan);
+  border-radius: 14px;
+  padding: 20px;
+  z-index: 100;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 20px rgba(0,240,255,0.1);
+}
+.tool-popout::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px; height: 12px;
+  background: var(--surface2);
+  border-left: 1px solid var(--cyan);
+  border-top: 1px solid var(--cyan);
+}
+.tool-link:hover .tool-popout { display: block; }
+.tool-popout strong {
+  display: block;
+  color: var(--cyan);
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+.tool-popout p {
+  color: var(--text2);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.tool-go {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 0.85rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.tool-go:hover { transform: scale(1.05); box-shadow: 0 0 15px rgba(0,240,255,0.3); }
+
 /* Panels */
 .panel { display: none; }
 .panel.active { display: block; }
@@ -624,23 +707,42 @@ footer a { color: var(--cyan); text-decoration: none; }
 <div class="container">
   <div class="hero">
     <img src="realisimhq-logo.png" alt="RealiSimHQ" class="hero-logo" />
-    <h1>RealiSimHQ</h1>
-    <div class="sub">Assetto Corsa Content Catalog</div>
+    <div class="sub" style="font-style:italic;font-size:1.3rem;letter-spacing:3px;">Assetto Corsa Content Catalog</div>
   </div>
   
   <div class="stats">
-    <div class="stat"><div class="num">362</div><div class="label">Cars</div></div>
-    <div class="stat"><div class="num">140</div><div class="label">Tracks</div></div>
-    <div class="stat"><div class="num">8</div><div class="label">Car Packs</div></div>
-    <div class="stat"><div class="num">92 GB</div><div class="label">Total Content</div></div>
+    <div class="stat stat-tab active" data-tab="cars"><div class="num" id="stat-cars">362</div><div class="label">Cars</div></div>
+    <div class="stat stat-tab" data-tab="tracks"><div class="num">140</div><div class="label">Tracks</div></div>
+    <div class="stat stat-tab" data-tab="packs"><div class="num">8</div><div class="label">Car Packs</div></div>
+    <div class="stat stat-tab" data-tab="servers"><div class="num" id="stat-servers">4</div><div class="label">Servers</div></div>
   </div>
   
-  <div class="tabs">
-    <div class="tab active" data-tab="cars">🏎️ Cars <span class="count">362</span></div>
-    <div class="tab" data-tab="tracks">🏁 Tracks <span class="count">140</span></div>
-    <div class="tab" data-tab="packs">📦 Packs <span class="count">8</span></div>
-    <div class="tab" data-tab="servers">🖥️ Servers <span class="count">4</span></div>
-    <div class="tab" data-tab="tools">🔧 Tools <span class="count">3</span></div>
+  <!-- Tools row (replaces old tabs) -->
+  <div class="tools-bar">
+    <div class="tool-link">
+      <span class="tool-name">⚡ OG Physics Swapper</span>
+      <div class="tool-popout">
+        <strong>OG Physics Swapper</strong>
+        <p>Swap your car's physics with professional drift carpacks. 7 packs, 78+ donor cars. Drop your data folder, pick a pack, download.</p>
+        <a href="/ac-physics-tool/" class="tool-go">Open Tool →</a>
+      </div>
+    </div>
+    <div class="tool-link">
+      <span class="tool-name">🔧 Extended Physics Generator</span>
+      <div class="tool-popout">
+        <strong>Extended Physics Generator</strong>
+        <p>Generate complete extended drift physics from any car. 4 engine tiers (240–530 HP), tyre options, instant ZIP download.</p>
+        <a href="/extended-physics-drift-edition/" class="tool-go">Open Tool →</a>
+      </div>
+    </div>
+    <div class="tool-link">
+      <span class="tool-name">🏎️ Rim & Tire Swap</span>
+      <div class="tool-popout">
+        <strong>Rim & Tire Swap</strong>
+        <p>Visual rim and tire customization. 30+ rim brands, 14 tire textures. Adjust offsets, preview, and generate a config package.</p>
+        <a href="/Rim-and-Tire-Swap/" class="tool-go">Open Tool →</a>
+      </div>
+    </div>
   </div>
   
   <!-- CARS -->
@@ -703,42 +805,6 @@ footer a { color: var(--cyan); text-decoration: none; }
   <!-- SERVERS -->
   <div class="panel" id="panel-servers">
     <div class="servers" id="servers-grid"></div>
-  </div>
-  
-  <!-- TOOLS -->
-  <div class="panel" id="panel-tools">
-    <div class="servers">
-      <div class="server-card">
-        <h3>OG Physics Swapper</h3>
-        <div class="theme">Swap your car's physics with professional drift carpacks</div>
-        <div class="meta">
-          <span>7 Carpacks</span>
-          <span>78+ Donor Cars</span>
-        </div>
-        <div class="features">Drag & drop your car's data folder, pick a carpack, get matched to the closest donor car. Free trial available — one free generation, no account needed.</div>
-        <a href="/ac-physics-tool/" class="join-btn" style="margin-top:12px;">OPEN TOOL →</a>
-      </div>
-      <div class="server-card">
-        <h3>Extended Physics Generator</h3>
-        <div class="theme">Generate complete extended drift physics from any car</div>
-        <div class="meta">
-          <span>4 Engine Options</span>
-          <span>240–530 HP</span>
-        </div>
-        <div class="features">Drop your car data, pick a power level (Stage 1–Built Motor), choose tyre setup. Outputs a ready-to-install extended physics ZIP. Free trial — one free generation.</div>
-        <a href="/extended-physics-drift-edition/" class="join-btn" style="margin-top:12px;">OPEN TOOL →</a>
-      </div>
-      <div class="server-card">
-        <h3>Rim & Tire Swap</h3>
-        <div class="theme">Visual rim and tire customization for AC drift cars</div>
-        <div class="meta">
-          <span>30+ Rim Brands</span>
-          <span>14 Tire Textures</span>
-        </div>
-        <div class="features">Pick rims, tires, and textures — preview and generate a config package for your car. Adjust offsets with precision. Free generations available.</div>
-        <a href="/Rim-and-Tire-Swap/" class="join-btn" style="margin-top:12px;">OPEN TOOL →</a>
-      </div>
-    </div>
   </div>
   
   <footer>
@@ -828,14 +894,19 @@ function togglePack(btn) {
 }
 
 function renderServers() {
-  document.getElementById('servers-grid').innerHTML = SERVERS.map(s => `
+  document.getElementById('servers-grid').innerHTML = SERVERS.map(s => {
+    const isOnline = s._online;
+    const statusClass = isOnline ? '' : ' offline';
+    const statusText = isOnline ? `${s._players}/${s._maxPlayers} Players` : 'Offline';
+    const trackText = isOnline && s._track ? s._track : s.track;
+    return `
     <div class="server-card">
       <h3>${s.name}</h3>
       <div class="theme">${s.theme}</div>
-      <div class="server-live">
+      <div class="server-live${statusClass}">
         <span class="live-dot"></span>
-        <span class="player-count">Online</span>
-        <span class="current-track">🏁 ${s.track}</span>
+        <span class="player-count">${statusText}</span>
+        <span class="current-track">🏁 ${trackText}</span>
       </div>
       <div class="meta">
         <span>HTTP :${s.http}</span>
@@ -843,10 +914,9 @@ function renderServers() {
         <span>${s.cars} cars</span>
       </div>
       <div class="features">${s.features}</div>
-      <p style="font-size:0.75rem;color:var(--text2);margin-bottom:12px;">Live player count available via Content Manager or direct connection.</p>
       <a href="${s.link}" target="_blank" class="join-btn">JOIN SERVER →</a>
-    </div>
-  `).join('');
+    </div>`;
+  }).join('');
 }
 
 function filterCars() {
@@ -908,13 +978,13 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
   });
 });
 
-// Tabs
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+// Stat-tabs (clickable stat boxes switch panels)
+document.querySelectorAll('.stat-tab').forEach(stat => {
+  stat.addEventListener('click', () => {
+    document.querySelectorAll('.stat-tab').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    tab.classList.add('active');
-    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+    stat.classList.add('active');
+    document.getElementById('panel-' + stat.dataset.tab).classList.add('active');
   });
 });
 
@@ -941,9 +1011,31 @@ renderTracks(TRACKS);
 renderPacks();
 renderServers();
 
+// Dynamic server status
+async function updateServerStatus() {
+  let onlineCount = 0;
+  for (const s of SERVERS) {
+    try {
+      const resp = await fetch(`http://${API_HOST}:${s.http}/api/details`, { signal: AbortSignal.timeout(3000) });
+      if (resp.ok) {
+        const data = await resp.json();
+        s._online = true;
+        s._players = data.Clients || 0;
+        s._maxPlayers = data.MaxClients || 0;
+        s._track = data.Track || s.track;
+        onlineCount++;
+      }
+    } catch(e) { s._online = false; }
+  }
+  document.getElementById('stat-servers').textContent = onlineCount + '/' + SERVERS.length;
+  renderServers();
+}
+updateServerStatus();
+setInterval(updateServerStatus, 60000);
+
 // Update car count stat to exclude zipped carpacks
 const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks').length;
-document.querySelector('.stats .stat:first-child .num').textContent = nonZippedCount;
+document.getElementById('stat-cars').textContent = nonZippedCount;
 </script>
 </body>
 </html>
