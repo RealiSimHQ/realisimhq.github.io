@@ -780,7 +780,7 @@ footer a { color: var(--cyan); text-decoration: none; }
     <div class="filters">
       <input type="text" class="search" id="car-search" placeholder="Search cars..." />
       <select id="filter-make"><option value="">All Makes</option><option value="BMW">BMW</option><option value="Buick">Buick</option><option value="Cadillac">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Dodge">Dodge</option><option value="Ford">Ford</option><option value="GMC">GMC</option><option value="Harley-Davidson">Harley-Davidson</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Kawasaki">Kawasaki</option><option value="Lada">Lada</option><option value="Lancia">Lancia</option><option value="Lexus">Lexus</option><option value="MG">MG</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="Mercury">Mercury</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Other">Other</option><option value="Plymouth">Plymouth</option><option value="Pontiac">Pontiac</option><option value="Porsche">Porsche</option><option value="Scion">Scion</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Yamaha">Yamaha</option></select>
-      <select id="filter-pack"><option value="">All Packs</option><option value="ADL-RealiSim HQ">ADL-RealiSim HQ</option><option value="Initial D">Initial D</option><option value="Initial U$D">Initial U$D</option><option value="JDAM">JDAM</option><option value="L.E.V.E.L.">L.E.V.E.L.</option><option value="Police">Police</option><option value="RallyCross">RallyCross</option><option value="T.A.N.D.E.M.">T.A.N.D.E.M.</option><option value="TAP">TAP</option><option value="Traffic">Traffic</option><option value="U$D v2">U$D v2</option><option value="X10DD">X10DD</option></select>
+      <select id="filter-pack"><option value="">All Packs</option><option value="Initial D">Initial D</option><option value="Initial U$D">Initial U$D</option><option value="JDAM">JDAM</option><option value="L.E.V.E.L.">L.E.V.E.L.</option><option value="Police">Police</option><option value="RallyCross">RallyCross</option><option value="T.A.N.D.E.M.">T.A.N.D.E.M.</option><option value="TAP">TAP</option><option value="Traffic">Traffic</option><option value="U$D v2">U$D v2</option><option value="X10DD">X10DD</option></select>
       <select id="filter-physics"><option value="">All Physics</option><option value="00.Arch.X10DD">00.Arch.X10DD</option><option value="01.) X10DD.Grassroots">01.) X10DD.Grassroots</option><option value="01.) X10DD.Grassroots/001.Server Exclusives">01.) X10DD.Grassroots/001.Server Exclusives</option><option value="02.) X10DD.Street">02.) X10DD.Street</option><option value="02.) X10DD.Street/Street+">02.) X10DD.Street/Street+</option><option value="03.) X10DD.Muscle">03.) X10DD.Muscle</option><option value="04.) X10DD.ProSpec">04.) X10DD.ProSpec</option><option value="240HP／55Deg">240HP／55Deg</option><option value="420HP／70Deg">420HP／70Deg</option><option value="Busa Trucks">Busa Trucks</option><option value="COSMIC">COSMIC</option><option value="Commisioned">Commisioned</option><option value="Extended">Extended</option><option value="Extra Cars">Extra Cars</option><option value="Fast and Furious">Fast and Furious</option><option value="LVL-GR8">LVL-GR8</option><option value="LVL-RX">LVL-RX</option><option value="Motorcycle Touge Traffic">Motorcycle Touge Traffic</option><option value="Pack">Pack</option><option value="RX Style Fun Cars">RX Style Fun Cars</option><option value="TAProots">TAProots</option></select>
       <span class="filter-count" id="car-count">362 cars</span>
     </div>
@@ -896,7 +896,7 @@ function renderTracks(data) {
 
 function renderPacks() {
   // Packs tab shows only the zipped carpack downloads
-  const zipped = CARS.filter(c => c.pack === 'Zipped Carpacks');
+  const zipped = CARS.filter(c => c.pack === 'Zipped Carpacks' && !c.name.includes('ADL'));
   document.getElementById('packs-grid').innerHTML = zipped.map(c => `
     <div class="pack-card">
       <div class="pack-header">
@@ -948,8 +948,9 @@ function filterCars() {
   const physics = document.getElementById('filter-physics').value;
   
   const filtered = CARS.filter(c => {
-    // Never show zipped carpacks in the cars tab
+    // Never show zipped carpacks or ADL-RealiSim HQ in the cars tab
     if (c.pack === 'Zipped Carpacks') return false;
+    if (c.pack === 'ADL-RealiSim HQ') return false;
     if (q && !c.make.toLowerCase().includes(q) && !c.model.toLowerCase().includes(q) && !c.name.toLowerCase().includes(q) && !c.pack.toLowerCase().includes(q)) return false;
     if (make && c.make !== make) return false;
     if (pack && c.pack !== pack) return false;
@@ -1057,7 +1058,7 @@ updateServerStatus();
 setInterval(updateServerStatus, 300000);
 
 // Update car count stat to exclude zipped carpacks
-const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks').length;
+const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks' && c.pack !== 'ADL-RealiSim HQ').length;
 document.getElementById('stat-cars').textContent = nonZippedCount;
 </script>
 </body>
