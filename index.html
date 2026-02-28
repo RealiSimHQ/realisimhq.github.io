@@ -339,6 +339,7 @@ td.pack {
 .pack-TANDEM { background: rgba(255,45,117,0.12); color: var(--pink); }
 .pack-RallyCross { background: rgba(255,140,0,0.12); color: var(--orange); }
 .pack-TAP { background: rgba(255,215,0,0.12); color: var(--gold); }
+.pack-SMT { background: rgba(34,139,34,0.15); color: #4ade60; }
 .pack-ADL { background: rgba(180,77,255,0.12); color: var(--purple); }
 .pack-InitialD { background: rgba(255,45,117,0.12); color: var(--pink); }
 .pack-JDAM { background: rgba(255,140,0,0.12); color: var(--orange); }
@@ -850,7 +851,7 @@ footer a { color: var(--cyan); text-decoration: none; }
         <thead><tr>
           <th data-sort="name">Track Name <span class="arrow">↕</span></th>
           <th data-sort="type">Type <span class="arrow">↕</span></th>
-          <th data-sort="rshq" style="text-align:center"><img src="favicon.png" alt="RSHQ" style="height:16px;vertical-align:middle"> <span class="arrow">↕</span></th>
+          <th data-sort="rshq" style="text-align:center"><img src="rshq-icon.png" alt="RSHQ" style="height:14px;vertical-align:middle"> <span class="arrow">↕</span></th>
           <th data-sort="x10dd" style="text-align:center">SurfaceFX <span class="arrow">↕</span></th>
           <th data-sort="lastUpdated" style="text-align:right">Updated <span class="arrow">↕</span></th>
           <th data-sort="size" style="text-align:right">Size (MB) <span class="arrow">↕</span></th>
@@ -966,7 +967,7 @@ function renderCars(data) {
 }
 
 function trackTypeClass(type) {
-  const map = { 'Freeroam':'pack-LEVEL', 'Touge':'pack-X10DD', 'Circuit':'pack-TAP', 'Competition':'pack-TANDEM', 'Smokey Mountain Touge':'pack-default' };
+  const map = { 'Freeroam':'pack-LEVEL', 'Touge':'pack-X10DD', 'Circuit':'pack-TAP', 'Competition':'pack-TANDEM', 'Smokey Mountain Touge':'pack-SMT' };
   return map[type] || 'pack-default';
 }
 
@@ -979,7 +980,7 @@ function renderTracks(data) {
     <tr>
       <td class="model" style="text-align:left">${nameHtml}</td>
       <td class="pack"><span class="pack-badge ${trackTypeClass(t.type)}">${t.type}</span></td>
-      <td style="text-align:center">${t.rshq ? '<img src="favicon.png" alt="RSHQ" style="height:18px;vertical-align:middle">' : '—'}</td>
+      <td style="text-align:center">${t.rshq ? '<img src="rshq-icon.png" alt="RSHQ" style="height:14px;vertical-align:middle">' : '—'}</td>
       <td style="text-align:center">${t.x10dd ? '<span class="sfx-badge">✓ SurfaceFX</span>' : '—'}</td>
       <td class="updated" style="text-align:right;white-space:nowrap;font-size:0.85em;opacity:0.8">${t.lastUpdated || '—'}</td>
       <td class="size">${t.size} MB</td>
