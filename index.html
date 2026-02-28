@@ -791,6 +791,8 @@ footer a { color: var(--cyan); text-decoration: none; }
           <th data-sort="model" style="text-align:right">Model <span class="arrow">↕</span></th>
           <th data-sort="pack">Pack <span class="arrow">↕</span></th>
           <th data-sort="physics">Physics <span class="arrow">↕</span></th>
+          <th data-sort="angle" style="text-align:center">Angle <span class="arrow">↕</span></th>
+          <th data-sort="hp" style="text-align:center">HP <span class="arrow">↕</span></th>
           <th data-sort="size" style="text-align:right">Size <span class="arrow">↕</span></th>
         </tr></thead>
         <tbody id="car-body"></tbody>
@@ -847,6 +849,38 @@ const SERVERS = [
 
 const API_HOST = "152.53.83.105";
 
+// ─── Pack metadata: angle, hp, notes, customWheels, lastUpdated ───
+const PACK_META = {
+  'TAP':          { angle: '70', hp: '350-375', customWheels: true, note: 'All Around Fun', lastUpdated: 'Jan 12 2026' },
+  'TAP|TAProots':    { angle: '55-60', hp: 'OEM', customWheels: true, note: 'OEM Feel Touge', lastUpdated: 'Jan 12 2026' },
+  'TAP|Commisioned': { angle: '70', hp: '350-375', customWheels: true, note: 'Commissioned Builds', lastUpdated: 'Jan 12 2026' },
+  'U$D v2':       { angle: '65', hp: '300-550', customWheels: false, note: 'Solid Rear Axle Muscle Car Specs, Custom Angle Kits', lastUpdated: 'Dec 24 2025' },
+  'Initial U$D':  { angle: '65', hp: '300-550', customWheels: false, note: 'Solid Rear Axle Muscle Car Specs', lastUpdated: 'Dec 24 2025' },
+  'JDAM':         { angle: '70', hp: '400', customWheels: false, note: 'Drift Missiles', lastUpdated: 'Dec 6 2025' },
+  'L.E.V.E.L.|420HP／70Deg': { angle: '70', hp: '420', customWheels: false, note: 'Standardized Weights Engines Tires across all Cars for Street Spec Competitions', lastUpdated: 'Aug 2 2025' },
+  'L.E.V.E.L.|240HP／55Deg': { angle: '55', hp: '240', customWheels: false, note: 'Standardized Weights Engines Tires across all Cars for Grassroots Spec Competitions', lastUpdated: 'Jul 25 2025' },
+  'T.A.N.D.E.M.': { angle: '55', hp: '300-500', customWheels: false, note: 'Low Angle Mid HP Unreleased Personal Pack', lastUpdated: 'Jun 4 2025' },
+  'X10DD|00.Arch.X10DD':         { angle: '50', hp: '240', customWheels: false, note: 'Grassroots Archetype Cars', lastUpdated: 'Dec 6 2024' },
+  'X10DD|01.) X10DD.Grassroots': { angle: '50', hp: '240', customWheels: false, note: 'Grassroots Feel, Modded OEM Engine Curve', lastUpdated: 'Dec 6 2024' },
+  'X10DD|01.) X10DD.Grassroots/001.Server Exclusives': { angle: '50', hp: '240', customWheels: false, note: 'Grassroots Feel, Server Exclusive Cars', lastUpdated: 'Dec 6 2024' },
+  'X10DD|02.) X10DD.Street':     { angle: '60', hp: '350-500', customWheels: false, note: 'Street w/ ECU Options', lastUpdated: 'Nov 24 2024' },
+  'X10DD|02.) X10DD.Street/Street+': { angle: '60', hp: '350-500', customWheels: false, note: 'Street w/ ECU Options', lastUpdated: 'Nov 24 2024' },
+  'X10DD|03.) X10DD.Muscle':     { angle: '65', hp: '500', customWheels: false, note: 'Unreleased U$D v1.5', lastUpdated: 'Jul 4 2024' },
+  'X10DD|04.) X10DD.ProSpec':    { angle: '70', hp: '750-1100', customWheels: false, note: 'Unreleased FD ProSpec Cars', lastUpdated: 'Jan 18 2025' },
+  'X10DD|Fast and Furious':      { angle: '70', hp: '350+', customWheels: false, note: 'Touge Cars on X10DD Physics', lastUpdated: 'Jan 6 2025' },
+  'Initial D':    { angle: 'OEM', hp: 'OEM', customWheels: false, note: 'Touge Cars on X10DD Physics', lastUpdated: 'May 22 2025' },
+  'L.E.V.E.L.|Extra Cars': { angle: '70', hp: '420', customWheels: false, note: 'Extra Fun Cars', lastUpdated: 'Aug 2 2025' },
+  'RallyCross|Busa Trucks': { angle: '—', hp: '—', customWheels: false, note: 'Mini Trucks with Motorcycle Engines', lastUpdated: '' },
+  'RallyCross|LVL-GR8':    { angle: '—', hp: '—', customWheels: false, note: 'Group 8 Rally Cars', lastUpdated: '' },
+  'RallyCross|LVL-RX':     { angle: '—', hp: '—', customWheels: false, note: 'RallyCross Cars', lastUpdated: '' },
+  'RallyCross|RX Style Fun Cars': { angle: '—', hp: '—', customWheels: false, note: 'RX Style Fun Cars', lastUpdated: '' },
+};
+
+function getPackMeta(pack, physics) {
+  // Try pack|physics first, then pack|TAProots for TAP roots, then pack alone
+  return PACK_META[pack + '|' + physics] || PACK_META[pack] || null;
+}
+
 function packClass(pack) {
   if (pack.includes('X10DD')) return 'pack-X10DD';
   if (pack.includes('L.E.V.E.L') || pack.includes('LVL')) return 'pack-LEVEL';
@@ -861,15 +895,22 @@ function packClass(pack) {
 
 function renderCars(data) {
   const tbody = document.getElementById('car-body');
-  tbody.innerHTML = data.map(c => `
-    <tr>
+  tbody.innerHTML = data.map(c => {
+    const meta = getPackMeta(c.pack, c.physics);
+    const angle = meta ? meta.angle : '—';
+    const hp = meta ? meta.hp : '—';
+    const noteAttr = meta && meta.note ? ` title="${meta.note}"` : '';
+    const wheelsIcon = meta && meta.customWheels ? ' 🔧' : '';
+    return `<tr>
       <td class="make">${c.make}</td>
       <td class="model">${c.link ? `<a href="${c.link}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--border)">${c.model}</a>` : c.model}</td>
-      <td class="pack"><span class="pack-badge ${packClass(c.pack)}">${c.pack}</span></td>
+      <td class="pack"><span class="pack-badge ${packClass(c.pack)}"${noteAttr}>${c.pack}${wheelsIcon}</span></td>
       <td class="physics">${c.physics || '—'}</td>
+      <td class="angle" style="text-align:center">${angle === '—' ? '—' : angle + '°'}</td>
+      <td class="hp" style="text-align:center">${hp}</td>
       <td class="size">${c.size} MB</td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
   document.getElementById('car-count').textContent = data.length + ' cars';
 }
 
@@ -992,6 +1033,18 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
     const data = isCarTable ? CARS : TRACKS;
     data.sort((a,b) => {
       let va = a[key], vb = b[key];
+      if (key === 'angle') {
+        const ma = getPackMeta(a.pack, a.physics), mb = getPackMeta(b.pack, b.physics);
+        va = ma ? parseFloat(ma.angle) || 0 : 0;
+        vb = mb ? parseFloat(mb.angle) || 0 : 0;
+        return (va - vb) * dir;
+      }
+      if (key === 'hp') {
+        const ma = getPackMeta(a.pack, a.physics), mb = getPackMeta(b.pack, b.physics);
+        va = ma ? parseFloat(ma.hp) || 0 : 0;
+        vb = mb ? parseFloat(mb.hp) || 0 : 0;
+        return (va - vb) * dir;
+      }
       if (key === 'size') return (va - vb) * dir;
       return String(va).localeCompare(String(vb)) * dir;
     });
