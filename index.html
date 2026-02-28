@@ -794,6 +794,7 @@ footer a { color: var(--cyan); text-decoration: none; }
           <th data-sort="angle" style="text-align:center">Angle <span class="arrow">↕</span></th>
           <th data-sort="hp" style="text-align:center">HP <span class="arrow">↕</span></th>
           <th data-sort="size" style="text-align:right">Size <span class="arrow">↕</span></th>
+          <th data-sort="lastUpdated" style="text-align:right">Updated <span class="arrow">↕</span></th>
         </tr></thead>
         <tbody id="car-body"></tbody>
       </table>
@@ -901,6 +902,7 @@ function renderCars(data) {
     const hp = meta ? meta.hp : '—';
     const noteAttr = meta && meta.note ? ` title="${meta.note}"` : '';
     const wheelsIcon = meta && meta.customWheels ? ' 🔧' : '';
+    const updated = meta && meta.lastUpdated ? meta.lastUpdated : '—';
     return `<tr>
       <td class="make">${c.make}</td>
       <td class="model">${c.link ? `<a href="${c.link}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--border)">${c.model}</a>` : c.model}</td>
@@ -909,6 +911,7 @@ function renderCars(data) {
       <td class="angle" style="text-align:center">${angle === '—' ? '—' : angle + '°'}</td>
       <td class="hp" style="text-align:center">${hp}</td>
       <td class="size">${c.size} MB</td>
+      <td class="updated" style="text-align:right;white-space:nowrap;font-size:0.85em;opacity:0.8">${updated}</td>
     </tr>`;
   }).join('');
   document.getElementById('car-count').textContent = data.length + ' cars';
@@ -1043,6 +1046,12 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
         const ma = getPackMeta(a.pack, a.physics), mb = getPackMeta(b.pack, b.physics);
         va = ma ? parseFloat(ma.hp) || 0 : 0;
         vb = mb ? parseFloat(mb.hp) || 0 : 0;
+        return (va - vb) * dir;
+      }
+      if (key === 'lastUpdated') {
+        const ma = getPackMeta(a.pack, a.physics), mb = getPackMeta(b.pack, b.physics);
+        va = ma && ma.lastUpdated ? new Date(ma.lastUpdated).getTime() || 0 : 0;
+        vb = mb && mb.lastUpdated ? new Date(mb.lastUpdated).getTime() || 0 : 0;
         return (va - vb) * dir;
       }
       if (key === 'size') return (va - vb) * dir;
