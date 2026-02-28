@@ -613,6 +613,43 @@ td.model a:hover::after {
   color: var(--text);
   letter-spacing: 0.3px;
 }
+/* Pack badge popouts in car table */
+.pack-badge-wrap {
+  position: relative;
+  display: inline-block;
+}
+.pack-popout {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  background: var(--surface2);
+  border: 1px solid var(--cyan);
+  border-radius: 10px;
+  padding: 10px 14px;
+  z-index: 100;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.5), 0 0 12px rgba(0,240,255,0.1);
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.4;
+  text-align: center;
+  pointer-events: none;
+}
+.pack-popout::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px; height: 10px;
+  background: var(--surface2);
+  border-right: 1px solid var(--cyan);
+  border-bottom: 1px solid var(--cyan);
+}
+.pack-badge-wrap:hover .pack-popout { display: block; }
+
 .tool-popout {
   display: none;
   position: absolute;
@@ -781,19 +818,18 @@ footer a { color: var(--cyan); text-decoration: none; }
       <input type="text" class="search" id="car-search" placeholder="Search cars..." />
       <select id="filter-make"><option value="">All Makes</option><option value="BMW">BMW</option><option value="Buick">Buick</option><option value="Cadillac">Cadillac</option><option value="Chevrolet">Chevrolet</option><option value="Dodge">Dodge</option><option value="Ford">Ford</option><option value="GMC">GMC</option><option value="Harley-Davidson">Harley-Davidson</option><option value="Honda">Honda</option><option value="Hyundai">Hyundai</option><option value="Infiniti">Infiniti</option><option value="Kawasaki">Kawasaki</option><option value="Lada">Lada</option><option value="Lancia">Lancia</option><option value="Lexus">Lexus</option><option value="MG">MG</option><option value="Mazda">Mazda</option><option value="Mercedes">Mercedes</option><option value="Mercury">Mercury</option><option value="Mitsubishi">Mitsubishi</option><option value="Nissan">Nissan</option><option value="Other">Other</option><option value="Plymouth">Plymouth</option><option value="Pontiac">Pontiac</option><option value="Porsche">Porsche</option><option value="Scion">Scion</option><option value="Subaru">Subaru</option><option value="Suzuki">Suzuki</option><option value="Toyota">Toyota</option><option value="Volkswagen">Volkswagen</option><option value="Yamaha">Yamaha</option></select>
       <select id="filter-pack"><option value="">All Packs</option><option value="Initial D">Initial D</option><option value="Initial U$D">Initial U$D</option><option value="JDAM">JDAM</option><option value="L.E.V.E.L.">L.E.V.E.L.</option><option value="Police">Police</option><option value="RallyCross">RallyCross</option><option value="T.A.N.D.E.M.">T.A.N.D.E.M.</option><option value="TAP">TAP</option><option value="Traffic">Traffic</option><option value="U$D v2">U$D v2</option><option value="X10DD">X10DD</option></select>
-      <select id="filter-physics"><option value="">All Physics</option><option value="00.Arch.X10DD">00.Arch.X10DD</option><option value="01.) X10DD.Grassroots">01.) X10DD.Grassroots</option><option value="01.) X10DD.Grassroots/001.Server Exclusives">01.) X10DD.Grassroots/001.Server Exclusives</option><option value="02.) X10DD.Street">02.) X10DD.Street</option><option value="02.) X10DD.Street/Street+">02.) X10DD.Street/Street+</option><option value="03.) X10DD.Muscle">03.) X10DD.Muscle</option><option value="04.) X10DD.ProSpec">04.) X10DD.ProSpec</option><option value="240HP／55Deg">240HP／55Deg</option><option value="420HP／70Deg">420HP／70Deg</option><option value="Busa Trucks">Busa Trucks</option><option value="COSMIC">COSMIC</option><option value="Commisioned">Commisioned</option><option value="Extended">Extended</option><option value="Extra Cars">Extra Cars</option><option value="Fast and Furious">Fast and Furious</option><option value="LVL-GR8">LVL-GR8</option><option value="LVL-RX">LVL-RX</option><option value="Motorcycle Touge Traffic">Motorcycle Touge Traffic</option><option value="Pack">Pack</option><option value="RX Style Fun Cars">RX Style Fun Cars</option><option value="TAProots">TAProots</option></select>
+      <select id="filter-physics"><option value="">All Physics</option><option value="00.Arch.X10DD">00.Arch.X10DD</option><option value="01.) X10DD.Grassroots">01.) X10DD.Grassroots</option><option value="01.) X10DD.Grassroots/001.Server Exclusives">01.) X10DD.Grassroots/001.Server Exclusives</option><option value="02.) X10DD.Street">02.) X10DD.Street</option><option value="02.) X10DD.Street/Street+">02.) X10DD.Street/Street+</option><option value="03.) X10DD.Muscle">03.) X10DD.Muscle</option><option value="04.) X10DD.ProSpec">04.) X10DD.ProSpec</option><option value="240HP／55Deg">240HP／55Deg</option><option value="420HP／70Deg">420HP／70Deg</option><option value="Busa Trucks">Busa Trucks</option><option value="COSMIC">COSMIC</option><option value="Extended">Extended</option><option value="Extra Cars">Extra Cars</option><option value="Fast and Furious">Fast and Furious</option><option value="LVL-GR8">LVL-GR8</option><option value="LVL-RX">LVL-RX</option><option value="Motorcycle Touge Traffic">Motorcycle Touge Traffic</option><option value="Pack">Pack</option><option value="RX Style Fun Cars">RX Style Fun Cars</option><option value="TAProots">TAProots</option></select>
       <span class="filter-count" id="car-count">362 cars</span>
     </div>
     <div class="table-wrap">
       <table id="car-table">
         <thead><tr>
-          <th data-sort="make">Make <span class="arrow">↕</span></th>
-          <th data-sort="model" style="text-align:right">Model <span class="arrow">↕</span></th>
-          <th data-sort="pack">Pack <span class="arrow">↕</span></th>
-          <th data-sort="physics">Physics <span class="arrow">↕</span></th>
+          <th data-sort="make" style="text-align:center">Make <span class="arrow">↕</span></th>
+          <th data-sort="model" style="text-align:center">Model <span class="arrow">↕</span></th>
           <th data-sort="angle" style="text-align:center">Angle <span class="arrow">↕</span></th>
           <th data-sort="hp" style="text-align:center">HP <span class="arrow">↕</span></th>
           <th data-sort="size" style="text-align:right">Size <span class="arrow">↕</span></th>
+          <th data-sort="pack">Pack <span class="arrow">↕</span></th>
           <th data-sort="lastUpdated" style="text-align:right">Updated <span class="arrow">↕</span></th>
         </tr></thead>
         <tbody id="car-body"></tbody>
@@ -816,6 +852,7 @@ footer a { color: var(--cyan); text-decoration: none; }
           <th data-sort="type">Type <span class="arrow">↕</span></th>
           <th data-sort="category">Source <span class="arrow">↕</span></th>
           <th data-sort="size" style="text-align:right">Size (MB) <span class="arrow">↕</span></th>
+          <th data-sort="lastUpdated" style="text-align:right">Updated <span class="arrow">↕</span></th>
         </tr></thead>
         <tbody id="track-body"></tbody>
       </table>
@@ -894,23 +931,32 @@ function packClass(pack) {
   return 'pack-default';
 }
 
+// For X10DD cars, display the physics sub-tier as the pack name (the carpack IS the sub-tier)
+function getDisplayPack(c) {
+  if (c.pack === 'X10DD' && c.physics) return c.physics;
+  if (c.pack === 'L.E.V.E.L.' && c.physics) return 'LEVEL ' + c.physics.replace(/HP.*/, '');
+  if (c.pack === 'TAP' && c.physics === 'TAProots') return 'TAP-Roots';
+  if (c.pack === 'TAP' && c.physics === 'Commisioned') return 'TAP (Commissioned)';
+  return c.pack;
+}
+
 function renderCars(data) {
   const tbody = document.getElementById('car-body');
   tbody.innerHTML = data.map(c => {
     const meta = getPackMeta(c.pack, c.physics);
     const angle = meta ? meta.angle : '—';
     const hp = meta ? meta.hp : '—';
-    const noteAttr = meta && meta.note ? ` title="${meta.note}"` : '';
     const wheelsIcon = meta && meta.customWheels ? ' 🔧' : '';
     const updated = meta && meta.lastUpdated ? meta.lastUpdated : '—';
+    const displayPack = getDisplayPack(c);
+    const noteHtml = meta && meta.note ? `<div class="pack-popout">${meta.note}</div>` : '';
     return `<tr>
-      <td class="make">${c.make}</td>
-      <td class="model">${c.link ? `<a href="${c.link}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--border)">${c.model}</a>` : c.model}</td>
-      <td class="pack"><span class="pack-badge ${packClass(c.pack)}"${noteAttr}>${c.pack}${wheelsIcon}</span></td>
-      <td class="physics">${c.physics || '—'}</td>
+      <td class="make" style="text-align:center">${c.make}</td>
+      <td class="model" style="text-align:center">${c.link ? `<a href="${c.link}" target="_blank" style="color:var(--text);text-decoration:none;border-bottom:1px dashed var(--border)">${c.model}</a>` : c.model}</td>
       <td class="angle" style="text-align:center">${angle === '—' ? '—' : angle + '°'}</td>
       <td class="hp" style="text-align:center">${hp}</td>
       <td class="size">${c.size} MB</td>
+      <td class="pack"><div class="pack-badge-wrap"><span class="pack-badge ${packClass(c.pack)}">${displayPack}${wheelsIcon}</span>${noteHtml}</div></td>
       <td class="updated" style="text-align:right;white-space:nowrap;font-size:0.85em;opacity:0.8">${updated}</td>
     </tr>`;
   }).join('');
@@ -933,6 +979,7 @@ function renderTracks(data) {
       <td class="pack"><span class="pack-badge ${trackTypeClass(t.type)}">${t.type}</span></td>
       <td class="pack"><span class="pack-badge pack-default">${t.category}</span></td>
       <td class="size">${t.size} MB</td>
+      <td class="updated" style="text-align:right;white-space:nowrap;font-size:0.85em;opacity:0.8">${t.lastUpdated || '—'}</td>
     </tr>`;
   }).join('');
   document.getElementById('track-count').textContent = data.length + ' tracks';
@@ -995,6 +1042,7 @@ function filterCars() {
     // Never show zipped carpacks or ADL-RealiSim HQ in the cars tab
     if (c.pack === 'Zipped Carpacks') return false;
     if (c.pack === 'ADL-RealiSim HQ') return false;
+    if (c.physics === 'Commisioned') return false;
     if (q && !c.make.toLowerCase().includes(q) && !c.model.toLowerCase().includes(q) && !c.name.toLowerCase().includes(q) && !c.pack.toLowerCase().includes(q)) return false;
     if (make && c.make !== make) return false;
     if (pack && c.pack !== pack) return false;
@@ -1120,7 +1168,7 @@ updateServerStatus();
 setInterval(updateServerStatus, 300000);
 
 // Update car count stat to exclude zipped carpacks
-const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks' && c.pack !== 'ADL-RealiSim HQ').length;
+const nonZippedCount = CARS.filter(c => c.pack !== 'Zipped Carpacks' && c.pack !== 'ADL-RealiSim HQ' && c.physics !== 'Commisioned').length;
 document.getElementById('stat-cars').textContent = nonZippedCount;
 </script>
 </body>
