@@ -803,22 +803,13 @@ footer a { color: var(--cyan); text-decoration: none; }
         <a href="/ac-extension-wizard/" class="tool-go">Open Tool →</a>
       </div>
     </div>
-    <div class="tool-link" onclick="window.open('https://www.patreon.com/posts/realisimhq-pro-152807951?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link', '_blank')" style="cursor:pointer;">
-      <span class="tool-name">Garage</span>
-      <div class="tool-popout">
-        <strong>Garage</strong>
-        <p>In-game CSP app for parts placement, brake/rotor/rim/tyre swaps, underglow, and more. Free version (Brakes, Wheels, Underglow) and Pro version (adds Parts, Steering) on Patreon.</p>
-        <a href="https://www.patreon.com/posts/realisimhq-pro-152807951?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link" target="_blank" class="tool-go">View on Patreon →</a>
+    <div class="tool-link" onclick="window.open('https://www.patreon.com/posts/realisimhq-pro-152807951?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link', '_blank')" style="cursor:pointer;background:linear-gradient(135deg, rgba(255,215,0,0.08), rgba(255,140,0,0.06));border:1px solid var(--gold);">
+      <span class="tool-name" style="color:var(--gold);">Garage</span>
+      <div class="tool-popout" style="border-color:var(--gold);">
+        <strong style="color:var(--gold);">RealiSimHQ Garage</strong>
+        <p>In-game CSP app for brake/rotor swaps, rim and tyre customization, underglow lighting, and more. Free version available — Pro adds full parts placement and steering wheel swap.</p>
+        <a href="https://www.patreon.com/posts/realisimhq-pro-152807951?utm_medium=clipboard_copy&utm_source=copyLink&utm_campaign=postshare_creator&utm_content=join_link" target="_blank" class="tool-go" style="background:linear-gradient(135deg, var(--gold), var(--orange));">Get Garage →</a>
       </div>
-    </div>
-  </div>
-  
-  <!-- Community Links -->
-  <div style="text-align:center; margin: 24px 0; padding: 20px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px;">
-    <div style="color: var(--text2); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px;">Community Links</div>
-    <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
-      <a href="https://www.overtake.gg/downloads/realisimhq-garage.82925/" target="_blank" style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, var(--cyan), var(--purple)); color: var(--bg); font-weight: 700; font-size: 0.85rem; border-radius: 10px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px;">Overtake.gg</a>
-      <a href="https://vosan.co/apps/realisimhq-garage" target="_blank" style="display: inline-block; padding: 10px 24px; background: linear-gradient(135deg, var(--cyan), var(--purple)); color: var(--bg); font-weight: 700; font-size: 0.85rem; border-radius: 10px; text-decoration: none; transition: all 0.2s; letter-spacing: 0.5px;">Vosan</a>
     </div>
   </div>
   
@@ -1195,7 +1186,8 @@ async function updateServerStatus() {
         server._players = status.clients;
         server._maxPlayers = status.maxclients;
         if (status.track) server._track = status.track;
-        if (status.online) onlineCount++;
+        if (status.name) server.name = status.name.replace(/^\d+\s*\|\s*/, '').replace(/\s*\|.*tinyurl.*$/i, '').replace(/\s*\|\s*CSP.*$/i, '').trim();
+        if (status.online) { server.cars = status.maxclients; onlineCount++; }
       }
     }
     document.getElementById('stat-servers').textContent = onlineCount;
