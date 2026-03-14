@@ -973,7 +973,7 @@ function renderCars(data) {
     const meta = getPackMeta(c.pack, c.physics);
     const angle = meta ? meta.angle : '—';
     const hp = meta ? meta.hp : '—';
-    const wheelsIcon = meta && meta.customWheels ? ' 🔧' : '';
+    const wheelsIcon = meta && meta.customWheels ? ' [W]' : '';
     const updated = meta && meta.lastUpdated ? meta.lastUpdated : '—';
     const displayPack = getDisplayPack(c);
     const noteHtml = meta && meta.note ? `<div class="pack-popout">${meta.note}</div>` : '';
@@ -1024,7 +1024,7 @@ function renderPacks() {
       <div class="pack-stats">
         <span><span class="n">${(c.size/1024).toFixed(1)}</span> GB</span>
       </div>
-      ${c.link ? `<a href="${c.link}" target="_blank" class="dl-btn" style="display:block;text-align:center;margin-top:12px;">⬇ DOWNLOAD</a>` : ''}
+      ${c.link ? `<a href="${c.link}" target="_blank" class="dl-btn" style="display:block;text-align:center;margin-top:12px;">DOWNLOAD</a>` : ''}
     </div>`).join('');
 }
 
