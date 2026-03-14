@@ -1034,7 +1034,7 @@ function renderServers() {
   document.getElementById('servers-grid').innerHTML = onlineServers.map(s => {
     const statusText = `${s._players}/${s._maxPlayers} Players`;
     const trackText = s._track || s.track;
-    const driftBadge = s.isDriftScoring ? `<a href="#" onclick="alert('Live drift leaderboard coming soon!'); return false;" style="display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, var(--gold), var(--cyan)); color: var(--bg); font-size: 0.75rem; font-weight: 700; border-radius: 8px; text-decoration: none; margin-left: 8px; letter-spacing: 0.5px;">LIVE DRIFT POINTS</a>` : '';
+    const driftBadge = s.isDriftScoring ? `<a href="leaderboard.html" style="display: inline-block; padding: 4px 12px; background: linear-gradient(135deg, var(--gold), var(--cyan)); color: var(--bg); font-size: 0.75rem; font-weight: 700; border-radius: 8px; text-decoration: none; margin-left: 8px; letter-spacing: 0.5px;">LIVE DRIFT POINTS</a>` : '';
     return `
     <div class="server-card">
       <h3>${s.name}${driftBadge}</h3>

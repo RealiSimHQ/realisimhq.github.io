@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drift Leaderboard - RealiSimHQ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --bg: #0a0a1a;
+  --surface: #12122a;
+  --surface2: #1a1a3e;
+  --surface3: #222255;
+  --cyan: #00f0ff;
+  --pink: #ff2d75;
+  --gold: #ffd700;
+  --orange: #ff8c00;
+  --green: #00ff88;
+  --purple: #b44dff;
+  --red: #ff4444;
+  --text: #e8e8f0;
+  --text2: #8888aa;
+  --border: #2a2a55;
+}
+body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+a { color:var(--cyan); text-decoration:none; }
+a:hover { text-decoration:underline; }
+
+.header {
+  text-align:center; padding:40px 20px 20px;
+  background:linear-gradient(180deg, rgba(0,240,255,0.05), transparent);
+  border-bottom:1px solid var(--border);
+}
+.header h1 { font-size:2rem; font-weight:800; letter-spacing:1px; }
+.header h1 span { background:linear-gradient(135deg,var(--gold),var(--orange)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.header p { color:var(--text2); margin-top:6px; font-size:0.9rem; }
+.back-link { display:inline-block; margin-top:12px; font-size:0.85rem; color:var(--cyan); }
+
+.container { max-width:960px; margin:0 auto; padding:24px 20px; }
+
+.stats-row {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:28px;
+}
+.stat-card {
+  background:var(--surface); border:1px solid var(--border); border-radius:12px;
+  padding:20px; text-align:center;
+}
+.stat-card .num { font-size:1.8rem; font-weight:800; font-family:'JetBrains Mono',monospace; }
+.stat-card .num.gold { color:var(--gold); }
+.stat-card .num.cyan { color:var(--cyan); }
+.stat-card .num.pink { color:var(--pink); }
+.stat-card .label { color:var(--text2); font-size:0.8rem; text-transform:uppercase; letter-spacing:1px; margin-top:4px; }
+
+.controls {
+  display:flex; gap:12px; margin-bottom:20px; flex-wrap:wrap; align-items:center;
+}
+.controls select, .controls input {
+  background:var(--surface); border:1px solid var(--border); color:var(--text);
+  padding:10px 16px; border-radius:10px; font-family:'Inter',sans-serif; font-size:0.9rem;
+  outline:none;
+}
+.controls select:focus, .controls input:focus { border-color:var(--cyan); }
+.controls select { cursor:pointer; }
+
+.table-wrap {
+  background:var(--surface); border:1px solid var(--border); border-radius:16px;
+  overflow:hidden;
+}
+table { width:100%; border-collapse:collapse; }
+thead { background:var(--surface2); }
+th { padding:14px 16px; text-align:left; font-size:0.75rem; text-transform:uppercase; letter-spacing:1px; color:var(--text2); font-weight:600; }
+td { padding:14px 16px; border-top:1px solid var(--border); font-size:0.9rem; }
+tr:hover td { background:rgba(0,240,255,0.03); }
+
+.rank { font-family:'JetBrains Mono',monospace; font-weight:700; width:50px; }
+.rank-1 { color:var(--gold); font-size:1.1rem; }
+.rank-2 { color:#c0c0c0; }
+.rank-3 { color:#cd7f32; }
+.player { font-weight:600; }
+.score { font-family:'JetBrains Mono',monospace; font-weight:700; color:var(--cyan); }
+.track-name { color:var(--text2); font-size:0.85rem; }
+.angle { color:var(--orange); }
+.speed { color:var(--green); }
+.date { color:var(--text2); font-size:0.8rem; }
+
+.empty { text-align:center; padding:60px 20px; color:var(--text2); }
+.empty h3 { font-size:1.2rem; margin-bottom:8px; color:var(--text); }
+
+.loading { text-align:center; padding:60px; color:var(--text2); }
+.loading::after { content:''; display:inline-block; width:20px; height:20px; border:2px solid var(--border); border-top-color:var(--cyan); border-radius:50%; animation:spin 0.8s linear infinite; margin-left:10px; vertical-align:middle; }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+@media (max-width:600px) {
+  .stats-row { grid-template-columns:1fr; }
+  .controls { flex-direction:column; }
+  th:nth-child(4), td:nth-child(4),
+  th:nth-child(5), td:nth-child(5) { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span>DRIFT LEADERBOARD</span></h1>
+  <p>RealiSimHQ 420 TougePoints — Live drift scoring across 15 touge tracks</p>
+  <a href="index.html" class="back-link">Back to RealiSimHQ</a>
+</div>
+
+<div class="container">
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="num gold" id="stat-top">--</div>
+      <div class="label">Highest Score</div>
+    </div>
+    <div class="stat-card">
+      <div class="num cyan" id="stat-players">--</div>
+      <div class="label">Unique Drivers</div>
+    </div>
+    <div class="stat-card">
+      <div class="num pink" id="stat-total">--</div>
+      <div class="label">Total Runs</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <select id="track-filter" onchange="loadLeaderboard()">
+      <option value="">All Tracks</option>
+    </select>
+    <input type="text" id="player-search" placeholder="Search player..." oninput="filterTable()">
+  </div>
+
+  <div class="table-wrap">
+    <div class="loading" id="loading">Loading scores</div>
+    <table id="board" style="display:none;">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Driver</th>
+          <th>Score</th>
+          <th>Angle</th>
+          <th>Speed</th>
+          <th>Track</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody id="board-body"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none;">
+      <h3>No scores yet</h3>
+      <p>Join a RealiSimHQ 420 TougePoints server and start drifting!</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://realisimhq-drift.paddy-bot-00.workers.dev';
+const TRACK_NAMES = {
+  'ek_momiji':'Momiji Line','ek_myogi':'Myogi','ek_akina':'Akina','ek_irohazaka':'Irohazaka',
+  'ek_hakone_turnpike':'Hakone Turnpike','ek_nagao':'Nagao','ek_nanamagari':'Nanamagari',
+  'ek_sadamine':'Sadamine','ek_tsubaki_line':'Tsubaki Line','ek_tsuchisaka':'Tsuchisaka',
+  'ek_tsukuba_fruits_line':'Tsukuba Fruits Line','happogahara':'Happogahara',
+  'minato_fukuroi':'Fukuroi','ndp_makime':'Makime','pk_usui_touge':'Usui Touge',
+  'esda_long_beach':'ESDA Long Beach','unknown':'Unknown'
+};
+let allScores = [];
+
+function prettyTrack(id) { return TRACK_NAMES[id] || id.replace(/_/g,' '); }
+function fmtK(n) { return n >= 1000 ? (n/1000).toFixed(1)+'k' : n.toString(); }
+
+async function loadStats() {
+  try {
+    const r = await fetch(API + '/stats');
+    const d = await r.json();
+    document.getElementById('stat-players').textContent = d.uniquePlayers || 0;
+    document.getElementById('stat-total').textContent = d.totalSubmissions || 0;
+  } catch(e) {}
+}
+
+async function loadLeaderboard() {
+  const track = document.getElementById('track-filter').value;
+  const url = API + '/leaderboard' + (track ? '?track=' + encodeURIComponent(track) + '&limit=100' : '?limit=100');
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    allScores = d.scores || [];
+    renderTable(allScores);
+
+    // Populate track filter if first load
+    const sel = document.getElementById('track-filter');
+    if (sel.options.length <= 1 && allScores.length > 0) {
+      const tracks = [...new Set(allScores.map(s => s.track))].sort();
+      tracks.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = prettyTrack(t);
+        sel.appendChild(opt);
+      });
+    }
+
+    // Top score
+    if (allScores.length > 0) {
+      document.getElementById('stat-top').textContent = fmtK(allScores[0].score);
+    }
+  } catch(e) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('empty').style.display = 'block';
+  }
+}
+
+function renderTable(scores) {
+  const loading = document.getElementById('loading');
+  const table = document.getElementById('board');
+  const empty = document.getElementById('empty');
+  const tbody = document.getElementById('board-body');
+
+  loading.style.display = 'none';
+  if (scores.length === 0) {
+    table.style.display = 'none'; empty.style.display = 'block'; return;
+  }
+  table.style.display = 'table'; empty.style.display = 'none';
+
+  tbody.innerHTML = scores.map((s, i) => {
+    const rc = i === 0 ? ' rank-1' : i === 1 ? ' rank-2' : i === 2 ? ' rank-3' : '';
+    const d = s.date || '';
+    return `<tr>
+      <td class="rank${rc}">${i+1}</td>
+      <td class="player">${esc(s.player)}</td>
+      <td class="score">${s.score.toLocaleString()}</td>
+      <td class="angle">${s.best_angle || '--'}deg</td>
+      <td class="speed">${s.top_speed || '--'} mph</td>
+      <td class="track-name">${prettyTrack(s.track)}</td>
+      <td class="date">${d}</td>
+    </tr>`;
+  }).join('');
+}
+
+function filterTable() {
+  const q = document.getElementById('player-search').value.toLowerCase();
+  const filtered = q ? allScores.filter(s => s.player.toLowerCase().includes(q)) : allScores;
+  renderTable(filtered);
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+loadStats();
+loadLeaderboard();
+// Refresh every 60s
+setInterval(() => { loadStats(); loadLeaderboard(); }, 60000);
+</script>
+</body>
+</html>
