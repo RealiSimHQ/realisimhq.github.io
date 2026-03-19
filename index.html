@@ -1063,8 +1063,8 @@ function renderServers() {
       if (packCar) {
         buttons += `<a href="${packCar.link}" target="_blank" style="${goldBtn}">${packCar.name.replace(/_/g,' ')} ↓</a>`;
       }
-      // Individual car downloads — only if no tinyurls (tinyurls = live content links, hardcoded carList may be stale)
-      if ((!s._tinyurls || s._tinyurls.length === 0) && s.carList) {
+      // Individual car downloads
+      if (s.carList) {
         s.carList.filter(n => n !== 'parts').forEach(carName => {
           const car = CARS.find(c => c.name === carName);
           if (car) {
