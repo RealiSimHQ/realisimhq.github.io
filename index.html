@@ -1076,8 +1076,11 @@ function renderServers() {
       // Collect all links for download-all
       const allLinks = [partsLink];
       if (s._tinyurls) s._tinyurls.forEach(u => allLinks.push(u));
-      if (packCar) allLinks.push(packCar.link);
-      if (s.carList) s.carList.filter(n => n !== 'parts').forEach(cn => { const c2 = CARS.find(c => c.name === cn); if (c2) allLinks.push(c2.link); });
+      if (packCar) {
+        allLinks.push(packCar.link);
+      } else if (s.carList) {
+        s.carList.filter(n => n !== 'parts').forEach(cn => { const c2 = CARS.find(c => c.name === cn); if (c2) allLinks.push(c2.link); });
+      }
       const dlAllId = 'dlall-' + s.http;
       window['_dl_'+s.http] = allLinks;
       const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();window['_dl_${s.http}'].forEach(function(u){window.open(u,'_blank')})" style="${goldBtn}">DOWNLOAD ALL ↓</a>`;
