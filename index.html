@@ -812,7 +812,7 @@ footer a { color: var(--cyan); text-decoration: none; }
       <div style="flex:1;">
         <div style="color:var(--gold);font-size:1.2rem;font-weight:800;letter-spacing:0.5px;">RealiSimHQ Garage</div>
         <div style="color:var(--text2);font-size:0.9rem;margin-top:4px;">In-game CSP app -- brakes, rims, tyres, underglow, parts placement, and more.</div>
-        <div style="color:var(--text2);font-size:0.75rem;margin-top:6px;opacity:0.6;">Last Updated: March 19, 2026</div>
+        <div style="color:var(--text2);font-size:0.75rem;margin-top:6px;opacity:0.6;">Last Updated: March 18, 2026</div>
       </div>
       <div style="padding:12px 28px;background:linear-gradient(135deg, var(--gold), var(--orange));color:var(--bg);font-weight:700;font-size:0.9rem;border-radius:12px;letter-spacing:0.5px;white-space:nowrap;">GET GARAGE</div>
     </a>
@@ -825,7 +825,7 @@ footer a { color: var(--cyan); text-decoration: none; }
       <div class="req-info">
         <h3>RealiSimHQ Rims and Parts <span class="req-badge">Required</span></h3>
         <p>This parts pack is required for all cars to display correctly. Download and install before adding cars.</p>
-        <p style="font-size:0.75rem;opacity:0.5;margin-top:4px;">Last Updated: March 19, 2026</p>
+        <p style="font-size:0.75rem;opacity:0.5;margin-top:4px;">Last Updated: March 13, 2026</p>
       </div>
       <a href="https://drive.google.com/file/d/1qHmA_JnPEBs9f5F4ykNXUT4DOoBy2qGQ/view" target="_blank" class="dl-btn">DOWNLOAD PARTS PACK</a>
     </div>
@@ -1042,28 +1042,31 @@ function renderServers() {
       // Check if there's a pack download available
       const packCar = s.packDownload ? CARS.find(c => c.name === s.packDownload) : null;
       if (packCar) {
+        // Clean up pack name for display
+        const packDisplay = packCar.name.replace(/^(X10DD|LVL420|TAP|TANDEM)\s*/i, '').replace(/_/g, ' ');
         carDownloads = `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.8);">Required Content:</div>
-          <div style="margin-bottom: 6px;"><a href="${packCar.link}" target="_blank" style="display: inline-block; padding: 3px 8px; background: var(--gold); color: var(--bg); font-size: 0.7rem; font-weight: 700; border-radius: 4px; text-decoration: none; margin-right: 4px; margin-bottom: 4px;">📦 ${packCar.name}</a></div>
+          <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.6);">Required Content:</div>
+          <a href="${packCar.link}" target="_blank" style="color: var(--gold); font-size: 0.8rem; text-decoration: none; opacity: 0.85;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">↓ ${packCar.name}</a>
         </div>`;
       } else {
-        // Individual car downloads
+        // Individual car downloads — clean readable names
         const carLinks = s.carList.map(carName => {
           const car = CARS.find(c => c.name === carName);
           if (car) {
-            // Check if it's a pack (zipped carpack)
             const isPack = car.pack === 'Zipped Carpacks' || car.name.includes('Pack') || car.name.includes('TANDEM');
-            const color = isPack ? 'var(--gold)' : 'var(--cyan)';
-            const icon = isPack ? '📦' : '🚗';
-            return `<a href="${car.link}" target="_blank" style="display: inline-block; padding: 3px 8px; background: ${color}; color: var(--bg); font-size: 0.7rem; font-weight: 700; border-radius: 4px; text-decoration: none; margin-right: 4px; margin-bottom: 4px;">${icon} ${carName}</a>`;
+            const color = isPack ? 'var(--gold)' : 'rgba(255,255,255,0.55)';
+            // Make readable: strip prefixes, replace underscores/dots
+            let display = carName.replace(/^(TAProot|TAP|X10DD\.Battle|X10DD|LVL420)[._-]*/i, '').replace(/_/g, ' ').replace(/\./g, ' ');
+            if (isPack) display = carName.replace(/_/g, ' ');
+            return `<a href="${car.link}" target="_blank" style="color: ${color}; font-size: 0.75rem; text-decoration: none; display: block; padding: 1px 0;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='${color}'">${display}</a>`;
           }
           return '';
         }).filter(l => l).join('');
         
         if (carLinks) {
           carDownloads = `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <div style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.8);">Required Content:</div>
-            <div style="display: flex; flex-wrap: wrap; gap: 4px;">${carLinks}</div>
+            <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.6);">Required Content:</div>
+            <div>${carLinks}</div>
           </div>`;
         }
       }
