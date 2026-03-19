@@ -1058,20 +1058,10 @@ function renderServers() {
           buttons += `<a href="${u}" target="_blank" style="${goldBtn}">${label} ↓</a>`;
         });
       }
-      // Carpack download if available
+      // Carpack download if available and no tinyurls already cover it
       const packCar = s.packDownload ? CARS.find(c => c.name === s.packDownload) : null;
-      if (packCar) {
+      if (packCar && (!s._tinyurls || s._tinyurls.length === 0)) {
         buttons += `<a href="${packCar.link}" target="_blank" style="${goldBtn}">${packCar.name.replace(/_/g,' ')} ↓</a>`;
-      }
-      // Individual car downloads
-      if (s.carList) {
-        s.carList.filter(n => n !== 'parts').forEach(carName => {
-          const car = CARS.find(c => c.name === carName);
-          if (car) {
-            let display = carName.replace(/^(TAProot|TAP|X10DD\.Battle|X10DD|LVL420|LVL)[._-]*/i, '').replace(/_/g, ' ').replace(/\./g, ' ').trim();
-            buttons += `<a href="${car.link}" target="_blank" style="${cyanBtn}">${display} ↓</a>`;
-          }
-        });
       }
       carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
         <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,0.6);">Required Downloads:</div>
