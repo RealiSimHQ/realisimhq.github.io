@@ -1079,7 +1079,8 @@ function renderServers() {
       if (packCar) allLinks.push(packCar.link);
       if (s.carList) s.carList.filter(n => n !== 'parts').forEach(cn => { const c2 = CARS.find(c => c.name === cn); if (c2) allLinks.push(c2.link); });
       const dlAllId = 'dlall-' + s.http;
-      const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();${JSON.stringify(allLinks)}.forEach(u=>window.open(u,'_blank'))" style="${goldBtn}">DOWNLOAD ALL ↓</a>`;
+      window['_dl_'+s.http] = allLinks;
+      const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();window['_dl_${s.http}'].forEach(function(u){window.open(u,'_blank')})" style="${goldBtn}">DOWNLOAD ALL ↓</a>`;
       carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);">Required Downloads:</span>${dlAllBtn}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">${buttons}</div>
