@@ -502,6 +502,18 @@ td.model a:hover::after {
   0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
   50% { box-shadow: 0 0 25px rgba(255,215,0,0.6), 0 0 40px rgba(255,215,0,0.2); }
 }
+.srv-dl-all {
+  display: inline-block;
+  padding: 7px 14px;
+  font-weight: 700;
+  font-size: 0.72rem;
+  border-radius: 8px;
+  text-decoration: none;
+  letter-spacing: 0.3px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color: #1a1a1a;
+  transition: all 0.2s;
+}
 
 /* PACK CARDS - uniform blocks with expandable car lists */
 .packs {
@@ -1063,8 +1075,8 @@ function renderServers() {
       if (packCar) {
         buttons += `<a href="${packCar.link}" target="_blank" style="${goldBtn}">${packCar.name.replace(/_/g,' ')} ↓</a>`;
       }
-      // Individual car downloads (skip 'parts' entry)
-      if (s.carList) {
+      // Individual car downloads — only if no tinyurls (tinyurls = live content links, hardcoded carList may be stale)
+      if ((!s._tinyurls || s._tinyurls.length === 0) && s.carList) {
         s.carList.filter(n => n !== 'parts').forEach(carName => {
           const car = CARS.find(c => c.name === carName);
           if (car) {
@@ -1083,7 +1095,7 @@ function renderServers() {
       }
       const dlAllId = 'dlall-' + s.http;
       window['_dl_'+s.http] = allLinks;
-      const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();window['_dl_${s.http}'].forEach(function(u){window.open(u,'_blank')})" style="${goldBtn}">DOWNLOAD ALL ↓</a>`;
+      const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();window['_dl_${s.http}'].forEach(function(u){window.open(u,'_blank')})" class="srv-dl-all">DOWNLOAD ALL ↓</a>`;
       carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;"><span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);">Required Downloads:</span>${dlAllBtn}</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">${buttons}</div>
