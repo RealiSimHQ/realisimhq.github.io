@@ -1179,8 +1179,8 @@ document.querySelectorAll('th[data-sort]').forEach(th => {
       if (key === 'lastUpdated') {
         if (isCarTable) {
           const ma = getPackMeta(a.pack, a.physics), mb = getPackMeta(b.pack, b.physics);
-          va = ma && ma.lastUpdated ? new Date(ma.lastUpdated).getTime() || 0 : 0;
-          vb = mb && mb.lastUpdated ? new Date(mb.lastUpdated).getTime() || 0 : 0;
+          va = a.lastUpdated ? new Date(a.lastUpdated).getTime() || 0 : (ma && ma.lastUpdated ? new Date(ma.lastUpdated).getTime() || 0 : 0);
+          vb = b.lastUpdated ? new Date(b.lastUpdated).getTime() || 0 : (mb && mb.lastUpdated ? new Date(mb.lastUpdated).getTime() || 0 : 0);
         } else {
           va = a.lastUpdated ? new Date(a.lastUpdated).getTime() || 0 : 0;
           vb = b.lastUpdated ? new Date(b.lastUpdated).getTime() || 0 : 0;
