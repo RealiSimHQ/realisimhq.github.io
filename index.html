@@ -1066,7 +1066,7 @@ function renderServers() {
       // Live car downloads from cm_content (via server API)
       if (s._carDownloads) {
         Object.entries(s._carDownloads).forEach(([carName, url]) => {
-          if (url) {
+          if (url && carName.toLowerCase() !== 'parts') {
             let display = carName.replace(/^(TAProot|TAP|X10DD\.Battle|X10DD|LVL420|LVL)[._-]*/i, '').replace(/_/g, ' ').replace(/\./g, ' ').trim();
             buttons += `<a href="${url}" target="_blank" style="${cyanBtn}">${display} ↓</a>`;
           }
