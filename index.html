@@ -1038,38 +1038,33 @@ function renderServers() {
     
     // Generate car download links
     let carDownloads = '';
-    if (s.carList && s.carList.length > 0) {
-      // Check if there's a pack download available
+    const partsLink = 'https://drive.google.com/file/d/1qHmA_JnPEBs9f5F4ykNXUT4DOoBy2qGQ/view';
+    const btnStyle = 'display:inline-block;padding:6px 16px;font-weight:700;font-size:0.75rem;border-radius:8px;text-decoration:none;letter-spacing:0.3px;transition:all 0.2s;margin:3px 4px 3px 0;';
+    const goldBtn = btnStyle + 'background:linear-gradient(135deg, var(--gold), var(--orange));color:var(--bg);';
+    const cyanBtn = btnStyle + 'background:linear-gradient(135deg, var(--cyan), var(--purple));color:var(--bg);';
+    {
+      let buttons = '';
+      // Parts pack — always
+      buttons += `<a href="${partsLink}" target="_blank" style="${goldBtn}">PARTS PACK ↓</a>`;
+      // Carpack download if available
       const packCar = s.packDownload ? CARS.find(c => c.name === s.packDownload) : null;
       if (packCar) {
-        // Clean up pack name for display
-        const packDisplay = packCar.name.replace(/^(X10DD|LVL420|TAP|TANDEM)\s*/i, '').replace(/_/g, ' ');
-        carDownloads = `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
-          <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.6);">Required Content:</div>
-          <a href="${packCar.link}" target="_blank" style="color: var(--gold); font-size: 0.8rem; text-decoration: none; opacity: 0.85;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.85'">↓ ${packCar.name}</a>
-        </div>`;
-      } else {
-        // Individual car downloads — clean readable names
-        const carLinks = s.carList.map(carName => {
+        buttons += `<a href="${packCar.link}" target="_blank" style="${goldBtn}">${packCar.name.replace(/_/g,' ')} ↓</a>`;
+      }
+      // Individual car downloads (skip 'parts' entry)
+      if (s.carList) {
+        s.carList.filter(n => n !== 'parts').forEach(carName => {
           const car = CARS.find(c => c.name === carName);
           if (car) {
-            const isPack = car.pack === 'Zipped Carpacks' || car.name.includes('Pack') || car.name.includes('TANDEM');
-            const color = isPack ? 'var(--gold)' : 'rgba(255,255,255,0.55)';
-            // Make readable: strip prefixes, replace underscores/dots
-            let display = carName.replace(/^(TAProot|TAP|X10DD\.Battle|X10DD|LVL420)[._-]*/i, '').replace(/_/g, ' ').replace(/\./g, ' ');
-            if (isPack) display = carName.replace(/_/g, ' ');
-            return `<a href="${car.link}" target="_blank" style="color: ${color}; font-size: 0.75rem; text-decoration: none; display: block; padding: 1px 0;" onmouseover="this.style.color='var(--cyan)'" onmouseout="this.style.color='${color}'">${display}</a>`;
+            let display = carName.replace(/^(TAProot|TAP|X10DD\.Battle|X10DD|LVL420|LVL)[._-]*/i, '').replace(/_/g, ' ').replace(/\./g, ' ').trim();
+            buttons += `<a href="${car.link}" target="_blank" style="${cyanBtn}">${display} ↓</a>`;
           }
-          return '';
-        }).filter(l => l).join('');
-        
-        if (carLinks) {
-          carDownloads = `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <div style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px; color: rgba(255,255,255,0.6);">Required Content:</div>
-            <div>${carLinks}</div>
-          </div>`;
-        }
+        });
       }
+      carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
+        <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,0.6);">Required Downloads:</div>
+        <div style="display:flex;flex-wrap:wrap;">${buttons}</div>
+      </div>`;
     }
     
     return `
