@@ -484,7 +484,7 @@ td.model a:hover::after {
 .join-btn {
   display: inline-block;
   padding: 10px 24px;
-  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  background: linear-gradient(135deg, var(--gold), var(--orange));
   color: var(--bg);
   font-weight: 700;
   font-size: 0.85rem;
@@ -495,7 +495,12 @@ td.model a:hover::after {
 }
 .join-btn:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  animation: gold-pulse 1.5s ease-in-out infinite;
+}
+@keyframes gold-pulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255,215,0,0.3); }
+  50% { box-shadow: 0 0 25px rgba(255,215,0,0.6), 0 0 40px rgba(255,215,0,0.2); }
 }
 
 /* PACK CARDS - uniform blocks with expandable car lists */
@@ -1040,8 +1045,8 @@ function renderServers() {
     let carDownloads = '';
     const partsLink = 'https://drive.google.com/file/d/1qHmA_JnPEBs9f5F4ykNXUT4DOoBy2qGQ/view';
     const btnStyle = 'display:inline-block;padding:6px 16px;font-weight:700;font-size:0.75rem;border-radius:8px;text-decoration:none;letter-spacing:0.3px;transition:all 0.2s;margin:3px 4px 3px 0;';
-    const goldBtn = btnStyle + 'background:linear-gradient(135deg, var(--gold), var(--orange));color:var(--bg);';
-    const cyanBtn = btnStyle + 'background:linear-gradient(135deg, var(--cyan), var(--purple));color:var(--bg);';
+    const goldBtn = btnStyle + 'background:linear-gradient(135deg, var(--gold), var(--orange));color:#1a1a1a;';
+    const cyanBtn = btnStyle + 'background:linear-gradient(135deg, var(--cyan), var(--purple));color:#1a1a1a;';
     {
       let buttons = '';
       // Parts pack — always
@@ -1061,8 +1066,14 @@ function renderServers() {
           }
         });
       }
+      // Collect all links for download-all
+      const allLinks = [partsLink];
+      if (packCar) allLinks.push(packCar.link);
+      if (s.carList) s.carList.filter(n => n !== 'parts').forEach(cn => { const c2 = CARS.find(c => c.name === cn); if (c2) allLinks.push(c2.link); });
+      const dlAllId = 'dlall-' + s.http;
+      const dlAllBtn = `<a href="#" id="${dlAllId}" onclick="event.preventDefault();${JSON.stringify(allLinks)}.forEach(u=>window.open(u,'_blank'))" style="${goldBtn}margin-left:auto;">DOWNLOAD ALL ↓</a>`;
       carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
-        <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,0.6);">Required Downloads:</div>
+        <div style="display:flex;align-items:center;margin-bottom:8px;"><span style="font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);">Required Downloads:</span>${dlAllBtn}</div>
         <div style="display:flex;flex-wrap:wrap;">${buttons}</div>
       </div>`;
     }
