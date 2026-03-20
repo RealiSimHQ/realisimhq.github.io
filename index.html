@@ -1052,11 +1052,14 @@ function renderServers() {
       let buttons = '';
       // Parts pack — always
       buttons += `<a href="${partsLink}" target="_blank" style="${goldBtn}">PARTS PACK ↓</a>`;
-      // Tinyurl links from server name (carpack + track downloads)
+      // Tinyurl links from server name (format: carpack x track)
+      // First tinyurl = carpack (gold), last tinyurl = track (pink), middle = gold
       if (s._tinyurls && s._tinyurls.length > 0) {
-        s._tinyurls.forEach(u => {
+        s._tinyurls.forEach((u, i) => {
           const label = u.split('/').pop().replace(/-/g, ' ');
-          buttons += `<a href="${u}" target="_blank" style="${goldBtn}">${label} ↓</a>`;
+          const isTrack = (i === s._tinyurls.length - 1 && s._tinyurls.length > 1);
+          const style = isTrack ? pinkBtn : goldBtn;
+          buttons += `<a href="${u}" target="_blank" style="${style}">${label} ↓</a>`;
         });
       }
       // Carpack tinyurl if available
@@ -1080,7 +1083,7 @@ function renderServers() {
       }
       carDownloads = `<div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1);">
         <div style="font-size:0.8rem;font-weight:600;margin-bottom:8px;color:rgba(255,255,255,0.6);">Required Downloads:</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">${buttons}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;overflow:hidden;">${buttons}</div>
       </div>`;
     }
     
