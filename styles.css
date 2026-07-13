@@ -323,12 +323,16 @@ dd { margin: 5px 0 0; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.05; co
   overflow: hidden;
   transition: transform .25s, border-color .25s, background .25s;
 }
-.package-card:hover { transform: translateY(-6px); border-color: var(--neon); background: rgba(0, 255, 179, .055); }
+.package-card:hover,
+.package-card:focus-visible { transform: translateY(-6px); border-color: var(--neon); background: rgba(0, 255, 179, .055); }
+.package-card:focus-visible { outline: 3px solid rgba(0, 255, 179, .45); outline-offset: 4px; }
+.package-card[role="button"] { cursor: pointer; }
 .package-card.featured { border-color: var(--neon); box-shadow: var(--shadow); }
 .package-index { color: var(--neon); font: 700 13px var(--mono); margin-bottom: 64px; }
 .price { color: var(--neon); font-size: 36px; font-weight: 900; letter-spacing: -.03em; }
 ul { padding-left: 18px; color: rgba(244, 234, 213, .8); line-height: 1.7; }
 .cap { margin-top: 22px; color: var(--white); font-weight: 900; }
+.package-action { display: inline-flex; margin-top: 22px; color: var(--neon); font: 900 12px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
 .launcher-card {
   border: 1px solid rgba(23, 33, 29, .18);
   padding: 28px;

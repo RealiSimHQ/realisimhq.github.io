@@ -28,6 +28,33 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
 
 const form = document.getElementById('bookingForm');
 const note = document.getElementById('formNote');
+const packageSelect = form?.querySelector('select[name="package"]');
+const gearField = form?.querySelector('textarea[name="gear"]');
+
+const startServiceRequest = (card) => {
+  if (!form || !packageSelect || !gearField) return;
+  const packageName = card.dataset.package || card.querySelector('h3')?.textContent?.trim() || 'Not Sure Yet';
+  const serviceInfo = card.dataset.serviceInfo || packageName;
+  packageSelect.value = packageName;
+  gearField.value = `I'm looking into this: ${serviceInfo}\n\nMy setup / hardware / issue:`;
+  document.querySelector('#book')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  history.pushState(null, '', '#book');
+  note.textContent = `${packageName} selected. Add your contact info and send the estimate request.`;
+  setTimeout(() => {
+    const firstEmpty = form.querySelector('input:placeholder-shown, textarea');
+    firstEmpty?.focus({ preventScroll: true });
+  }, 450);
+};
+
+document.querySelectorAll('.package-card[data-package]').forEach((card) => {
+  card.addEventListener('click', () => startServiceRequest(card));
+  card.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    startServiceRequest(card);
+  });
+});
+
 form?.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = new FormData(form);

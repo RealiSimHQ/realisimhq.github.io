@@ -33,6 +33,13 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /Sprint Cars/);
   assert.doesNotMatch(html, /IRACING|ASSETTO CORSA/);
   assert.match(html, /href="#book">Request Estimate/);
+  assert.match(html, /role="button" tabindex="0" aria-label="Start a service request for Sim Rescue \/ Setup"/);
+  assert.match(html, /data-package="Full Rig Setup"/);
+  assert.match(html, /Start service request →/);
+  assert.match(js, /I'm looking into this: \$\{serviceInfo\}/);
+  assert.match(js, /packageSelect\.value = packageName/);
+  assert.match(js, /\.package-card\[data-package\]/);
+  assert.match(js, /event\.key !== 'Enter' && event\.key !== ' '/);
   assert.match(js, /scrollIntoView\(\{ behavior: 'smooth', block: 'start' \}\)/);
   assert.match(css, /\.track-lines \{[\s\S]*pointer-events: none;/);
 });
