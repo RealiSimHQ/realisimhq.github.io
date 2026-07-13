@@ -271,6 +271,13 @@ dd { margin: 5px 0 0; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.05; co
   align-items: start;
 }
 .brands-intro p:last-child { color: #43504a; font-size: 19px; line-height: 1.48; }
+.hardware-note {
+  grid-column: 1 / -1;
+  margin: -26px 0 6px;
+  color: #43504a;
+  font-size: 14px;
+  line-height: 1.45;
+}
 .brand-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .brand-tab {
   min-height: 118px;

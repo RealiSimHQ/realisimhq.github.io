@@ -31,20 +31,20 @@ const note = document.getElementById('formNote');
 form?.addEventListener('submit', (event) => {
   event.preventDefault();
   const data = new FormData(form);
-  const subject = encodeURIComponent('RealiSimHQ install quote request');
+  const subject = encodeURIComponent('RealiSimHQ estimate request');
   const body = encodeURIComponent([
-    'RealiSimHQ install quote request',
+    'RealiSimHQ estimate request',
     '',
     `Name: ${data.get('name') || ''}`,
     `Contact: ${data.get('contact') || ''}`,
     `Location: ${data.get('location') || ''}`,
     `Package: ${data.get('package') || ''}`,
     '',
-    'Gear / goals:',
+    'Hardware / software / goals:',
     `${data.get('gear') || ''}`,
   ].join('\n'));
 
-  const recipient = window.REALISIMHQ_BOOKING_EMAIL || 'RealiSimHQ@gmail.com';
+  const recipient = window.REALISIMHQ_BOOKING_EMAIL || 'booking@realisimhq.com';
   window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
-  note.textContent = 'Opening your email client with the booking inquiry.';
+  note.textContent = 'Opening your email client with the estimate request. If it does not open, text Ryan at 330-601-6536.';
 });

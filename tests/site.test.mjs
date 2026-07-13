@@ -19,22 +19,26 @@ test('contains reachable internal sections and booking contact paths', () => {
   for (const id of ['top', 'brands', 'packages', 'launcher', 'maintenance', 'book']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
-  assert.match(html, /href="tel:\+13306016536"/);
-  assert.match(html, /href="sms:\+13306016536"/);
-  assert.match(html, /href="mailto:RealiSimHQ@gmail\.com\?subject=RealiSimHQ%20Install%20Quote"/);
-  assert.match(js, /'RealiSimHQ@gmail\.com'/);
+  assert.match(html, />Call 330-601-6536</);
+  assert.match(html, />Text Ryan</);
+  assert.match(html, /href="mailto:booking@realisimhq\.com\?subject=RealiSimHQ%20Estimate%20Request"/);
+  assert.match(js, /'booking@realisimhq\.com'/);
 });
 
 test('keeps simulator platform names and internal navigation correct', () => {
-  assert.match(html, /\( iRacing Assetto Corsa \)/);
+  assert.match(html, /iRacing · Assetto Corsa/);
+  assert.match(html, /No Hesi/);
+  assert.match(html, /Assetto Rally/);
+  assert.match(html, /DiRT Rally/);
+  assert.match(html, /Sprint Cars/);
   assert.doesNotMatch(html, /IRACING|ASSETTO CORSA/);
-  assert.match(html, /href="#packages">View Packages/);
+  assert.match(html, /href="#book">Request Estimate/);
   assert.match(js, /scrollIntoView\(\{ behavior: 'smooth', block: 'start' \}\)/);
   assert.match(css, /\.track-lines \{[\s\S]*pointer-events: none;/);
 });
 
 test('keeps responsive and interactive site styling in place', () => {
-  for (const selector of ['.services-strip', '.brand-tab', '.contact-actions', '@media (max-width: 980px)', '@media (max-width: 560px)']) {
+  for (const selector of ['.services-strip', '.brand-tab', '.hardware-note', '.contact-actions', '@media (max-width: 980px)', '@media (max-width: 560px)']) {
     assert.match(css, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 });
