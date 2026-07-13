@@ -16,6 +16,16 @@ window.addEventListener('pointermove', (event) => {
   glow.style.setProperty('--my', `${event.clientY - 180}px`);
 }, { passive: true });
 
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    const target = document.querySelector(link.getAttribute('href'));
+    if (!target) return;
+    event.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    history.pushState(null, '', link.getAttribute('href'));
+  });
+});
+
 const form = document.getElementById('bookingForm');
 const note = document.getElementById('formNote');
 form?.addEventListener('submit', (event) => {
