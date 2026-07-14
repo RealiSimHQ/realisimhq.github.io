@@ -20,7 +20,8 @@ test('contains reachable internal sections and booking contact paths', () => {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.doesNotMatch(html, />Call 330-601-6536</);
-  assert.match(html, />Call Ryan Directly</);
+  assert.doesNotMatch(html, />Call Ryan Directly</);
+  assert.match(html, />Talk to a Human</);
   assert.match(html, />Text a Question to a Human</);
   assert.match(html, /href="mailto:booking@realisimhq\.com\?subject=RealiSimHQ%20Estimate%20Request"/);
   assert.match(js, /'booking@realisimhq\.com'/);
@@ -41,6 +42,8 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /Rudder Pedals/);
   assert.match(html, /FPV Sims/);
   assert.match(html, /RealiSimHQ - Less BS-More Driving/);
+  assert.match(html, /Premium flight and driving simulator installs, tuning, launcher support, and After Intall Support/);
+  assert.doesNotMatch(html, /personal aftercare|and aftercare/);
   assert.match(html, /href="assets\/favicon\.png\?v=rshq-20260713"/);
   assert.match(html, /Tell Us What You've Got to Work With/);
   assert.match(html, /The goal: a clean, reliable setup you can fire up without fighting settings every time/);
