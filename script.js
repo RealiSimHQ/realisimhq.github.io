@@ -32,19 +32,37 @@ const note = document.getElementById('formNote');
 const packageSelect = form?.querySelector('select[name="package"]');
 const gearField = form?.querySelector('textarea[name="gear"]');
 const gearBuilder = document.getElementById('gearBuilder');
+const gearOptions = [...document.querySelectorAll('.gear-option[data-sim-types]')];
 let gearType = 'Driving Sim';
+
+const fieldLabel = (key) => key.replace(/([A-Z])/g, ' $1').replace(/^./, (char) => char.toUpperCase());
+
+const updateGearOptions = () => {
+  for (const option of gearOptions) {
+    const allowedTypes = option.dataset.simTypes?.split(/\s{2,}|(?=Driving Sim|Flight Sim|Other)/).map((type) => type.trim()).filter(Boolean) || [];
+    const visible = allowedTypes.includes(gearType);
+    option.classList.toggle('is-hidden', !visible);
+    option.querySelectorAll('select, textarea, input').forEach((field) => {
+      field.disabled = !visible;
+    });
+  }
+};
 
 document.querySelectorAll('.gear-type').forEach((button) => {
   button.addEventListener('click', () => {
     gearType = button.dataset.gearType || gearType;
     document.querySelectorAll('.gear-type').forEach((item) => item.classList.toggle('active', item === button));
+    updateGearOptions();
   });
 });
 
+updateGearOptions();
+
 document.getElementById('useGearBuilder')?.addEventListener('click', () => {
   if (!gearBuilder || !gearField || !packageSelect || !note) return;
-  const data = new FormData(gearBuilder);
-  const lines = [...data.entries()].map(([key, value]) => `${key.replace(/([A-Z])/g, ' $1')}: ${value}`);
+  const lines = [...data.entries()]
+    .filter(([, value]) => String(value).trim())
+    .map(([key, value]) => `${fieldLabel(key)}: ${value}`);
   packageSelect.value = gearType === 'Flight Sim' ? 'Flight Simulator Support' : 'Not Sure Yet';
   gearField.value = [`I'm looking into this: ${gearType}`, '', 'What I have / need:', ...lines].join('\n');
   document.querySelector('#book')?.scrollIntoView({ behavior: 'smooth', block: 'start' });

@@ -333,6 +333,13 @@ dd { margin: 5px 0 0; font-size: clamp(22px, 2.3vw, 32px); line-height: 1.05; co
 .gear-checklist { grid-column: 2; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .gear-checklist label { text-transform: none; letter-spacing: 0; font-size: 13px; }
 .gear-checklist label span { font-weight: 900; text-transform: uppercase; letter-spacing: .05em; font-size: 11px; color: #087962; }
+.gear-checklist .gear-option.is-hidden { display: none; }
+.gear-checklist .wide { grid-column: 1 / -1; }
+.gear-checklist textarea {
+  width: 100%;
+  min-height: 96px;
+  resize: vertical;
+}
 
 .intro,
 .booking,
