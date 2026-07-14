@@ -35,7 +35,7 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /Rudder Pedals/);
   assert.match(html, /FPV Sims/);
   assert.match(html, /RealiSimHQ - Less BS-More Driving/);
-  assert.match(html, /href="assets\/favicon\.png"/);
+  assert.match(html, /href="assets\/favicon\.png\?v=rshq-20260713"/);
   assert.match(html, /Tell Us What You've Got to Work With/);
   assert.match(html, /one button press and you’re playing/);
   assert.match(html, /Driving Sim/);
