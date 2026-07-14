@@ -10,11 +10,12 @@ const io = new IntersectionObserver((entries) => {
 reveals.forEach((el) => io.observe(el));
 
 const glow = document.querySelector('.cursor-glow');
-window.addEventListener('pointermove', (event) => {
-  if (!glow) return;
-  glow.style.setProperty('--mx', `${event.clientX - 180}px`);
-  glow.style.setProperty('--my', `${event.clientY - 180}px`);
-}, { passive: true });
+if (glow && matchMedia('(pointer: fine)').matches) {
+  window.addEventListener('pointermove', (event) => {
+    glow.style.setProperty('--mx', `${event.clientX - 180}px`);
+    glow.style.setProperty('--my', `${event.clientY - 180}px`);
+  }, { passive: true });
+}
 
 document.querySelectorAll('a[href^="#"]').forEach((link) => {
   link.addEventListener('click', (event) => {

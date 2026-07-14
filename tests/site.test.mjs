@@ -31,6 +31,9 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /Assetto Rally/);
   assert.match(html, /DiRT Rally/);
   assert.match(html, /Sprint Cars/);
+  assert.match(html, /Flight Sticks/);
+  assert.match(html, /Rudder Pedals/);
+  assert.match(html, /FPV Sims/);
   assert.doesNotMatch(html, /IRACING|ASSETTO CORSA/);
   assert.match(html, /href="#book">Request Estimate/);
   assert.match(html, /role="button" tabindex="0" aria-label="Start a service request for Sim Rescue \/ Setup"/);
