@@ -31,6 +31,26 @@ const form = document.getElementById('bookingForm');
 const note = document.getElementById('formNote');
 const packageSelect = form?.querySelector('select[name="package"]');
 const gearField = form?.querySelector('textarea[name="gear"]');
+const gearBuilder = document.getElementById('gearBuilder');
+let gearType = 'Driving Sim';
+
+document.querySelectorAll('.gear-type').forEach((button) => {
+  button.addEventListener('click', () => {
+    gearType = button.dataset.gearType || gearType;
+    document.querySelectorAll('.gear-type').forEach((item) => item.classList.toggle('active', item === button));
+  });
+});
+
+document.getElementById('useGearBuilder')?.addEventListener('click', () => {
+  if (!gearBuilder || !gearField || !packageSelect || !note) return;
+  const data = new FormData(gearBuilder);
+  const lines = [...data.entries()].map(([key, value]) => `${key.replace(/([A-Z])/g, ' $1')}: ${value}`);
+  packageSelect.value = gearType === 'Flight Sim' ? 'Flight Simulator Support' : 'Not Sure Yet';
+  gearField.value = [`I'm looking into this: ${gearType}`, '', 'What I have / need:', ...lines].join('\n');
+  document.querySelector('#book')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  history.pushState(null, '', '#book');
+  note.textContent = `${gearType} details added. Add your contact info and send the estimate request.`;
+});
 
 const startServiceRequest = (card) => {
   if (!form || !packageSelect || !gearField) return;

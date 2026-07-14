@@ -10,7 +10,7 @@ const css = readFileSync(file('styles.css'), 'utf8');
 const js = readFileSync(file('script.js'), 'utf8');
 
 test('publishes the essential static site files', () => {
-  for (const name of ['index.html', 'styles.css', 'script.js', 'assets/realsimhq-logo.png']) {
+  for (const name of ['index.html', 'styles.css', 'script.js', 'assets/realsimhq-logo.png', 'assets/favicon.png']) {
     assert.equal(existsSync(file(name)), true, `${name} must exist`);
   }
 });
@@ -20,20 +20,28 @@ test('contains reachable internal sections and booking contact paths', () => {
     assert.match(html, new RegExp(`id="${id}"`));
   }
   assert.match(html, />Call 330-601-6536</);
-  assert.match(html, />Text Ryan</);
+  assert.match(html, />Text a Question to a Human</);
   assert.match(html, /href="mailto:booking@realisimhq\.com\?subject=RealiSimHQ%20Estimate%20Request"/);
   assert.match(js, /'booking@realisimhq\.com'/);
 });
 
 test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /iRacing · Assetto Corsa/);
-  assert.match(html, /No Hesi/);
+  assert.doesNotMatch(html, /No Hesi/);
   assert.match(html, /Assetto Rally/);
   assert.match(html, /DiRT Rally/);
   assert.match(html, /Sprint Cars/);
   assert.match(html, /Flight Sticks/);
   assert.match(html, /Rudder Pedals/);
   assert.match(html, /FPV Sims/);
+  assert.match(html, /RealiSimHQ - Less BS-More Driving/);
+  assert.match(html, /href="assets\/favicon\.png"/);
+  assert.match(html, /Tell Us What You've Got to Work With/);
+  assert.match(html, /one button press and you’re playing/);
+  assert.match(html, /Driving Sim/);
+  assert.match(html, /Flight Sim/);
+  assert.match(html, /https:\/\/www\.simhq\.com\//);
+  assert.match(html, /https:\/\/www\.microcenter\.com\/site\/content\/racing-sim-builder\.aspx/);
   assert.doesNotMatch(html, /IRACING|ASSETTO CORSA/);
   assert.match(html, /href="#book">Request Estimate/);
   assert.match(html, /role="button" tabindex="0" aria-label="Start a service request for Sim Rescue \/ Setup"/);
@@ -43,12 +51,14 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(js, /packageSelect\.value = packageName/);
   assert.match(js, /\.package-card\[data-package\]/);
   assert.match(js, /event\.key !== 'Enter' && event\.key !== ' '/);
+  assert.match(js, /useGearBuilder/);
+  assert.match(js, /I'm looking into this: \$\{gearType\}/);
   assert.match(js, /scrollIntoView\(\{ behavior: 'smooth', block: 'start' \}\)/);
   assert.match(css, /\.track-lines \{[\s\S]*pointer-events: none;/);
 });
 
 test('keeps responsive and interactive site styling in place', () => {
-  for (const selector of ['.services-strip', '.brand-tab', '.hardware-note', '.contact-actions', '@media (max-width: 980px)', '@media (max-width: 560px)']) {
+  for (const selector of ['.services-strip', '.brand-tab', '.hardware-note', '.gear-builder', '.gear-type-tabs', '.contact-actions', '@media (max-width: 980px)', '@media (max-width: 560px)']) {
     assert.match(css, new RegExp(selector.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')));
   }
 });
