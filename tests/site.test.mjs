@@ -19,19 +19,24 @@ test('contains reachable internal sections and booking contact paths', () => {
   for (const id of ['top', 'brands', 'packages', 'launcher', 'maintenance', 'book']) {
     assert.match(html, new RegExp(`id="${id}"`));
   }
-  assert.match(html, />Call 330-601-6536</);
+  assert.doesNotMatch(html, />Call 330-601-6536</);
+  assert.match(html, />Call Ryan Directly</);
   assert.match(html, />Text a Question to a Human</);
   assert.match(html, /href="mailto:booking@realisimhq\.com\?subject=RealiSimHQ%20Estimate%20Request"/);
   assert.match(js, /'booking@realisimhq\.com'/);
 });
 
 test('keeps simulator platform names and internal navigation correct', () => {
-  assert.match(html, /iRacing · Assetto Corsa/);
+  assert.match(html, />iRacing<\/dd>/);
+  assert.match(html, />Assetto Corsa<\/dd>/);
   assert.doesNotMatch(html, /No Hesi/);
   assert.match(html, /Assetto Rally/);
   assert.match(html, /DiRT Rally/);
   assert.match(html, /Sprint Cars/);
   assert.match(html, /Traffic Driving/);
+  assert.match(html, /Driving Sims/);
+  assert.match(html, /Flight \+ FPV Sims/);
+  assert.match(html, /PC, Displays \+ Effects/);
   assert.match(html, /Flight Sticks/);
   assert.match(html, /Rudder Pedals/);
   assert.match(html, /FPV Sims/);
@@ -46,6 +51,7 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /https:\/\/www\.simhq\.com\//);
   assert.match(html, /https:\/\/www\.microcenter\.com\/site\/content\/racing-sim-builder\.aspx/);
   assert.doesNotMatch(html, /IRACING|ASSETTO CORSA/);
+  assert.doesNotMatch(html, /Start Simple Over SSH|Web-Based Updater As The Customer Base Grows/);
   assert.match(html, /href="#book">Request Estimate/);
   assert.match(html, /role="button" tabindex="0" aria-label="Start a service request for Sim Rescue \/ Setup"/);
   assert.match(html, /data-package="Full Rig Setup"/);
