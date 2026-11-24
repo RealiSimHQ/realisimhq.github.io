@@ -60,6 +60,7 @@ updateGearOptions();
 
 document.getElementById('useGearBuilder')?.addEventListener('click', () => {
   if (!gearBuilder || !gearField || !packageSelect || !note) return;
+  const data = new FormData(gearBuilder);
   const lines = [...data.entries()]
     .filter(([, value]) => String(value).trim())
     .map(([key, value]) => `${fieldLabel(key)}: ${value}`);

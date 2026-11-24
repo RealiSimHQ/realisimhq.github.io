@@ -42,7 +42,10 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(html, /Rudder Pedals/);
   assert.match(html, /FPV Sims/);
   assert.match(html, /RealiSimHQ - Less BS-More Driving/);
-  assert.match(html, /Premium flight and driving simulator installs, tuning, launcher support, and After Intall Support/);
+  assert.match(html, /Simulator Installation &amp; Support · Wooster, OH \+ 50 miles/);
+  assert.match(html, /href="https:\/\/realisimhq\.com\/"/);
+  assert.doesNotMatch(html, /After Intall Support|3 Packs Available|Update Staged/);
+  assert.match(html, /In Development/);
   assert.doesNotMatch(html, /personal aftercare|and aftercare/);
   assert.match(html, /href="assets\/favicon\.png\?v=rshq-20260713"/);
   assert.match(html, /Tell Us What You've Got to Work With/);
@@ -69,6 +72,7 @@ test('keeps simulator platform names and internal navigation correct', () => {
   assert.match(js, /field\.disabled = !visible/);
   assert.match(js, /fieldLabel\(key\)/);
   assert.match(js, /useGearBuilder/);
+  assert.match(js, /const data = new FormData\(gearBuilder\);/);
   assert.match(js, /I'm looking into this: \$\{gearType\}/);
   assert.match(js, /scrollIntoView\(\{ behavior: 'smooth', block: 'start' \}\)/);
   assert.match(css, /\.track-lines \{[\s\S]*pointer-events: none;/);
